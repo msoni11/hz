@@ -7,7 +7,7 @@ $assetcode = explode(',', $assetcode);
 $msoffice_array = explode(',', $msoffice);
 $amcwar_array = explode(',', $amcwar);
 ?>
-
+<!--- test commit -->
 <!-- Navbar start -->
 <?php include 'includes/_incNavigation.php'; ?>
 <!-- Navbar end   -->
