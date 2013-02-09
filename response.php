@@ -14,32 +14,44 @@ $db = new cDB();
 //manager responce
 if(isset($_REQUEST["mapproved"]) && !empty($_REQUEST["request_id"]))
 {
- 	
-    
-    if($_REQUEST["mapproved"]==1)
+ 	if($resultarr["Status"]=="0" && $resultarr["ManagerRejected"]==0)//if request is not processed
         {
-            $req_id = $_REQUEST["request_id"];
-           	$db1 = new cDB();
-			$sql = "UPDATE hz_asset_requests SET Status = 1 WHERE  requestID = ".$req_id;
-			if($db1->Query($sql))
+        if($_REQUEST["mapproved"]==1 )
             {
-                $approved=1;
-                if(sendMailToHOD("Adminstrator@hz.com","New Asset Request",$resultarr))
+                $req_id = $_REQUEST["request_id"];
+               	$db1 = new cDB();
+    			$sql = "UPDATE hz_asset_requests SET Status = 1 WHERE  requestID = ".$req_id;
+    			if($db1->Query($sql))
                 {
-                    $approved++;
-                }//send email to HOD
+                    $approved=1;
+                    if(sendMailToHOD("Adminstrator@hz.com","New Asset Request",$resultarr))
+                    {
+                        $approved++;
+                    }//send email to HOD
+                }
+                else
+                {
+                    $approved=0;
+                }
+                
             }
-            else
+            elseif($_REQUEST["mapproved"]==0)
             {
-                $approved=0;
+                $ask_reason = 1;
+                $who = "MAN";
+    
             }
-            
         }
-        elseif($_REQUEST["mapproved"]==0)
+        else
         {
-            $ask_reason = 1;
-            $who = "MAN";
-
+            if($resultarr["ManagerRejected"]==1)
+            {
+               $manager_already_rejected=1; 
+            }
+            elseif($resultarr["Status"]==1)
+            {
+                $manager_already_approved=1;
+            }
         }
 }
 
@@ -48,31 +60,44 @@ if(isset($_REQUEST["mapproved"]) && !empty($_REQUEST["request_id"]))
 if(isset($_REQUEST["happroved"]) && !empty($_REQUEST["request_id"]))
 {
  	
-    
-    if($_REQUEST["happroved"]==1)
+    	if($resultarr["Status"]=="1" && $resultarr["HodRejected"]==0)//if request is not processed
         {
-            $req_id = $_REQUEST["request_id"];
-           	$db1 = new cDB();
-			$sql = "UPDATE hz_asset_requests SET Status = 2 WHERE  requestID = ".$req_id;
-			if($db1->Query($sql))
-            {
-                $happroved=1;
-                 if(sendMailToEmp($resultarr["email"],"Adminstrator@hz.com",$resultarr["HardwareID"],"Approved"," "))//send mail to employee
+            if($_REQUEST["happroved"]==1)
                 {
-                   $happroved++;
-                } 
-            }
-            else
-            {
-                $happroved=0;
-            }
-            
+                    $req_id = $_REQUEST["request_id"];
+                   	$db1 = new cDB();
+        			$sql = "UPDATE hz_asset_requests SET Status = 2 WHERE  requestID = ".$req_id;
+        			if($db1->Query($sql))
+                    {
+                        $happroved=1;
+                         if(sendMailToEmp($resultarr["email"],"Adminstrator@hz.com",$resultarr["HardwareID"],"Approved"," "))//send mail to employee
+                        {
+                           $happroved++;
+                        } 
+                    }
+                    else
+                    {
+                        $happroved=0;
+                    }
+                    
+                }
+                elseif($_REQUEST["happroved"]==0)
+                {
+                    $ask_reason = 1;
+                    $who = "HOD";
+                    
+                }
         }
-        elseif($_REQUEST["happroved"]==0)
+        else
         {
-            $ask_reason = 1;
-            $who = "HOD";
-            
+            if($resultarr["HodRejected"]==1)
+            {
+               $hod_already_rejected=1; 
+            }
+            elseif($resultarr["Status"]==2)
+            {
+                $hod_already_approved=1;
+            }
         }
 }
 
@@ -80,10 +105,10 @@ if(isset($_REQUEST["happroved"]) && !empty($_REQUEST["request_id"]))
 if(isset($_REQUEST["txtreason"]))
 {
             $req_id = $_REQUEST["request_id"];
-            if($_REQUEST["who_rejected"]=='HOD') {$status =1 ;}
-            if($_REQUEST["who_rejected"]=='MAN') {$status =0 ;}
+            if($_REQUEST["who_rejected"]=='HOD') {$status =1 ;$whoRejected="HodRejected"; }
+            if($_REQUEST["who_rejected"]=='MAN') {$status =0 ; $whoRejected="ManagerRejected";}
            	$db1 = new cDB();
-			$sql = "UPDATE hz_asset_requests SET RejectionReason = '".mysql_real_escape_string($_REQUEST["txtreason"])."',Status=$status WHERE  requestID = ".$req_id;
+			$sql = "UPDATE hz_asset_requests SET RejectionReason = '".mysql_real_escape_string($_REQUEST["txtreason"])."',Status=$status ,".$whoRejected."= 1  WHERE  requestID = ".$req_id;
 			if($db1->Query($sql))
             {
                 $rejected=1;
@@ -154,6 +179,30 @@ if(isset($_REQUEST["txtreason"]))
         else
         {
             echo "<div style='text-align:center;'><h2>Error Rejecting Request, Please try again later!</h2></div>";
+        }
+   }
+   
+   if($manager_already_rejected || $manager_already_approved)
+   {
+        if($manager_already_approved==1)
+        {
+            echo "<div style='text-align:center;min-height:300px;'><h2>Request Has Been Already Processed As:<strong>APPROVED</strong></h2></div>"; 
+        }
+        if($manager_already_rejected==1)
+        {
+            echo "<div style='text-align:center;min-height:300px;'><h2>Request Has Been Already Processed As:<strong>REJECTED</strong></h2></div>"; 
+        }
+   }
+   
+   if($hod_already_rejected || $hod_already_approved)
+   {
+        if($hod_already_approved==1)
+        {
+            echo "<div style='text-align:center;min-height:300px;'><h2>Request Has Been Already Processed As:<strong>APPROVED</strong></h2></div>"; 
+        }
+        if($hod_already_rejected==1)
+        {
+            echo "<div style='text-align:center;min-height:300px;'><h2>Request Has Been Already Processed As:<strong>REJECTED</strong></h2></div>"; 
         }
    }
    
