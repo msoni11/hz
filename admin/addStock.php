@@ -4,6 +4,8 @@ $db = new cDB();
 if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 1) {
 	header("Location:logout.php");
 }
+
+$admin = ($_SESSION["adminid"]) ? $_SESSION["adminid"]: "1";
 ?>
 
 <!-- Navbar start -->
@@ -153,7 +155,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 1) {
 					</select>
 				</div>
 				<div class="text-box-field"></div>
-
+                <input type="hidden" name="admin_id" id="admin_id" value="<?php echo $admin; ?>" /> 
 				<input type="button" name="newentry" id="newentry" value="Submit" style="width:120px; height:30px;margin-left:90px" /> 
 				<input type="reset" name="txtstockreset" id="txtstockreset" value="Reset" style="width:80px; height:30px;" />
 				</fieldset>

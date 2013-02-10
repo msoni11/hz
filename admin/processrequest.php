@@ -585,6 +585,7 @@ function newstock() {
 	$stockrate            = $_REQUEST['stockrate'];
 	$stockotherstatus     = strtoupper($_REQUEST['stockotherstatus']);
 	$stockentrytype       = strtoupper($_REQUEST['stockentrytype']);
+    $admin            = $_REQUEST['admin'];
     if(isset($_REQUEST["serials"]))
     {
 	$serials              = explode(",",$_REQUEST["serials"]);
@@ -700,14 +701,14 @@ function newstock() {
 				$modelid = $stockmodel;
 			}
 			$orderdate = mktime(0,0,0,$stockmonth,$stockday,$stockyear);
-			$sql = "INSERT INTO hz_stock(department,hardware,type,make,model,invoiceno,orderdate,partyname,receivername,quantity,rate,otherstatus,entrytype) 
+			$sql = "INSERT INTO hz_stock(department,hardware,type,make,model,invoiceno,orderdate,partyname,receivername,quantity,rate,otherstatus,entrytype,adminID) 
 					VALUES('".$stockdepartment."','".$hwid."',
 						'".$typeid."','".$makeid."',
 						'".$modelid."','".$stockinvoice."',
 						'".$orderdate."','".$stockpartyname."',
 						'".$stockrcvrname."','".$stockquantity."',
 						'".$stockrate."','".$stockotherstatus."',
-						'".$stockentrytype."'
+						'".$stockentrytype."', '".$admin."'
 					       )";
 			$db->Query($sql);
             

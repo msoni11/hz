@@ -159,6 +159,7 @@ $("#txtstockreset").click(function(){
         var stockrate          = ($("#txtaddrate").val());
         var stockotherstatus   = encodeURIComponent($("#txtaddotherstatus").val());
         var stockentrytype     = encodeURIComponent($("#txtaddentrytype").val());
+        var admin     = encodeURIComponent($("#admin_id").val());
 
 	if (stockdepartment == '-1') {
 			$("#loader").hide();
@@ -438,7 +439,7 @@ $("#txtstockreset").click(function(){
              } 
               //console.log(myData);
               //return false;
-              
+              myData += "&admin="+admin;
           $.ajax({
             url:"processrequest.php",
             type:"post",
