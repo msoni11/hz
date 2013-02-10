@@ -19,21 +19,26 @@ if (isset($_POST['txtsubmit'])) {
 		$usertype = 0; //Active directory check
 		$cfgDB->Query('SELECT * FROM config_ldap');
 		if ($cfgDB->RowCount) {
+			$config = array();
 			while ($cfgDB->ReadRow()) {
-				$options[] = array(
-					'domain_controllers' => array(
-						$cfgDB->RowData['hostUrl']
-					),
-					'account_suffix'=>$cfgDB->RowData['accountSuffix'],
-					'base_dn'=>$cfgDB->RowData['baseDN'],
-					'admin_username' => $cfgDB->RowData['userName'],
-					'admin_password' => $cfgDB->RowData['password'],
-				);
+				$config['ldapid'] = $cfgDB->RowData['id'];
+				$contexts = explode(';', $cfgDB->RowData['contexts']);
+				for ($i=0;$i<count($contexts);$i++) {
+					$config['options'][] = array(
+						'domain_controllers' => array(
+							$cfgDB->RowData['hostUrl']
+						),
+						'account_suffix'=>$cfgDB->RowData['accountSuffix'],
+						'base_dn'=>$contexts[$i],
+						'admin_username' => $cfgDB->RowData['userName'],
+						'admin_password' => $cfgDB->RowData['password'],
+					);
+				}
 			}
 		}
 	} else {
 		$usertype = 1; //admin check
-		$cfgDB->Query('SELECT * FROM config_ldap WHERE id='.$isadmin);
+		/*$cfgDB->Query('SELECT * FROM config_ldap WHERE id='.$isadmin);
 		if ($cfgDB->RowCount) {
 			while ($cfgDB->ReadRow()) {
 				$options[] = array(
@@ -46,19 +51,19 @@ if (isset($_POST['txtsubmit'])) {
 					'admin_password' => $cfgDB->RowData['password'],
 				);
 			}
-		}
+		}*/
 		
-		if (count($options) !== 1) {
+		/*if (count($options) !== 1) {
 			$_SESSION['status'][] = 'We could not authorize admin for multiple OU';
 			header("Location:index.php");
-		}
+		}*/
 	}
 	
 	if (empty($_SESSION['status'])) {
 		//login with AD
 		if ($usertype === 0) {
 			if ($ldap) {
-				foreach ($options as $option) {
+				foreach ($config['options'] as $option) {
 					try {
 						$adldap = new adLDAP($option);
 						if ($adldap->user()->authenticate($txtusername, $txtpassword)) {
@@ -66,8 +71,10 @@ if (isset($_POST['txtsubmit'])) {
 							$_SESSION['username']   = $txtusername;
 							$_SESSION['isadmin']    = 0;
 							$userdetail = $adldap->user()->info($txtusername, array("description","name","department","title","cn","sn","company","physicaldeliveryofficename","mail","manager"));
-						    if (!empty($userdetail))
+						    if (!empty($userdetail)) {
+						    	$_SESSION['ldapid'] = $config['ldapid'];
 								break;
+						    }
 						} else {
 							$_SESSION['status'][] = 'User doesn\'t exist! Enter valid username & password';
 							header("Location:index.php");
@@ -107,15 +114,16 @@ if (isset($_POST['txtsubmit'])) {
 				if ($db->ReadRow()) {
 					if ($db->RowData['password'] === $txtpassword) {
 						if ($usertype == 1) {
-								try {
+								/*try {
 									$adldap = new adLDAP($options[0]);
 								}
 								catch (adLDAPException $e) {
 									$_SESSION['status'][] = 'One of your ldap settings is not configured properly';
 									header("Location:index.php");
 									exit();
-								}
+								}*/
 							$_SESSION['username'] = $txtusername;
+						    $_SESSION['ldapid'] = $db->RowData['ldapID'];
 							$_SESSION['isadmin']  = $db->RowData['isadmin'];
 							header("Location:admin/admin_home.php");
 							exit();

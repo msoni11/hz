@@ -132,11 +132,17 @@ function get_user_details() {
 		if (isset($_SESSION['ldapid'])) {
 	 		$db = new cDB();
 			$option = getLdapOU($_SESSION['ldapid']);
-			if (count($option) == 1) {
-				$adldap = initializeLDAP($option[$_SESSION['ldapid']]);
-			}
 			$resultarr = array();
-			if ($detail = $adldap->user()->info($id, array("description","name","department","title","mail","manager"))) {
+			if (is_array($option) && !empty($option)) {
+				for($i=0;$i<count($option);$i++) {
+					$adldap = initializeLDAP($option[$i]);
+					$detail = $adldap->user()->info($id, array("description","name","department","title","mail","manager"));
+					if (!empty($detail)) {
+						break;
+					}
+				}
+			}
+			if (!empty($detail)) {
 				$detail['manager'] = $adldap->contact()->info($detail[0]['manager'][0]);
 				$resultarr['empiddesc'] = $detail[0]['description'][0];
 				$resultarr['empname'] = $detail[0]['name'][0];
