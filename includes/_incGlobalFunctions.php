@@ -21,9 +21,9 @@ function getLdapOU($IDorUserID, $isadmnin=false) {
 	$db = new cDB();
 	if ($isadmnin) {
 	    //$IDorUserID is admin id
-	    $sql = 'SELECT cl.* FROM hz_users hu 
+	    $sql = 'SELECT hcl.* FROM hz_users hu 
 	    			LEFT OUTER JOIN hz_admin_allowed_location hal ON hu.id = hal.adminID
-	    			LEFT OUTER JOIN hz_config_ldap hcl ON hcl.id = hal.ldapID
+	    			LEFT OUTER JOIN config_ldap hcl ON hcl.id = hal.ldapID
 	    		WHERE hu.id='.$IDorUserID;
 		$db->Query($sql);
 		if($db->RowCount) {

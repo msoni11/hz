@@ -119,25 +119,40 @@ function getserials() {
 	
 }
 
-//getting user details via username
-function get_user_details()
-{
-    $id = $_REQUEST['reggetempid'];
- if (isset($id) && $id != '') {
-		$db = new cDB();
-		//$getSql = $db->Query("SELECT * FROM hz_employees WHERE empid=".$id);
-		if ($detail = $adldap->user()->info($id, array("description","name","department","title"))) {
-				$resultarr['empname'] = $detail[0]['name'];
-//				$resultarr['unit'] = $$detail[0]['name'];
-				$resultarr['department'] = $detail[0]['department'];
-				$resultarr['designation'] = $$detail[0]['title'];
-                
+// Get employee details
+function get_user_details() {
+	$id = $_REQUEST['reggetempid'];
+	if (!isset($_SESSION['username'])) {
+		echo "101"; // Session expires! Login again
+		die;
+	} else if (isset($id) && $id != '') {
+		if (isset($_SESSION['ldapid'])) {
+	 		$db = new cDB();
+			$option = getLdapOU($_SESSION['ldapid']);
+			if (count($option) == 1) {
+				$adldap = initializeLDAP($option[$_SESSION['ldapid']]);
+			}
+			$resultarr = array();
+			if ($detail = $adldap->user()->info($id, array("description","name","department","title","mail","manager"))) {
+				$detail['manager'] = $adldap->contact()->info($detail[0]['manager'][0]);
+				$resultarr['empiddesc'] = $detail[0]['description'][0];
+				$resultarr['empname'] = $detail[0]['name'][0];
+				$resultarr['department'] = $detail[0]['department'][0];
+				$resultarr['designation'] = $detail[0]['title'][0];
+				$resultarr['empmail'] = $detail[0]['mail'][0];
+				$resultarr['mgrmail'] = $detail['manager'][0]['mail'][0];
+
 				echo json_encode($resultarr);
+			} else {
+				echo "103"; //some error reading from database
+			}
 		} else {
-			echo "103"; //some error reading from database
+			echo "109"; // ldapid variable not assigned ! failure
+			die;
 		}
 	} else {
-		echo "102"; // id doesn't exist
+		echo "105";
+		die();
 	}
 }
 

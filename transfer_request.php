@@ -15,61 +15,6 @@ $manager= ($_SESSION["managermail"][0]["mail"][0]) ? $_SESSION["managermail"][0]
 
 ?>
 <script src="js/request.js"></script>
-<script>
-$(document).ready(function(){
-    
-
-$("#txthardware").change(function(){
-        var hardware= $("#txthardware").val();
-      
-        $.ajax({
-            url:"processor_for_user.php",
-            type:"post",
-           data:"functype=getserials&hardware="+hardware,
-           success: function(result)
-           {
-            	var arr = $.parseJSON(result);
-                $("#txtserial").empty().append('<option value="-1" >----Select Serial Number----</option>');
-               
-                $.each(arr,function(key,val){
-                    $("#txtserial").append('<option value="'+key+'" >'+ val +'</option>');
-                });
-           }
-           
-        });
-        
-    });
-    
-    
-$("#txtempid").keyup(function(){
-        var empid= $("#txtempid").val();
-      
-        $.ajax({
-            url:"processor_for_user.php",
-            type:"post",
-           data:"functype=getuserinfo&reggetempid="+empid,
-           success: function(result)
-           {
-            	var arr = $.parseJSON(result);
-               
-                $("#txtempname").empty().append(arr["empname"]);
-                $("#txtempdept").empty().append(arr["department"]);
-                $("#txtempdesi").empty().append(arr["designation"]);
-                
-           }
-           
-        });
-        
-    });
-    
-    
-});
-    
-    
-    
-
-
-</script>
 <!-- Navbar start -->
 <?php include 'includes/_incNavigation.php'; ?>
 
@@ -84,12 +29,19 @@ $("#txtempid").keyup(function(){
 
 				<div style="height:20px;margin:0 0 0 200px; "><img src="images/ajax-loader.gif" id="loader" style="display:none" /></div>
 
-				<div class="text-box-name">Employee ID:</div>
+				<div class="text-box-name">Emp Username:</div>
 				<div class="text-box-field">
 					<input type="text" name="txtempid" id="txtempid" value="" class="form-text" size="30" maxlength="2048"  />
 				</div>
 				<div class="text-box-field"></div>
 				
+				<div id="hideEmpDetails" style="display:none">
+				<div class="text-box-name">Employee ID:</div>
+				<div class="text-box-field">
+					<input type="text" name="txtempiddesc" id="txtempiddesc" value="" class="form-text" size="30" maxlength="2048"  />
+				</div>
+				<div class="text-box-field"></div>
+
 				<div class="text-box-name">Employee Name:</div>
 				<div class="text-box-field">
 					<input type="text" name="txtempname" id="txtempname" value="" class="form-text" size="30" maxlength="2048"  />				
@@ -102,11 +54,12 @@ $("#txtempid").keyup(function(){
 				</div>
 				<div class="text-box-field"></div>
                 
-                <div class="text-box-name">Desination:</div>
+                <div class="text-box-name">Designation:</div>
 				<div class="text-box-field">
 					<input type="text" name="txtempdesi" id="txtempdesi" value="" class="form-text" size="30" maxlength="2048"  />				
 				</div>
 				<div class="text-box-field"></div>
+				</div>
                 
                 <div class="text-box-name">Hardware:</div>
 				<?php 
@@ -158,6 +111,8 @@ $("#txtempid").keyup(function(){
                 
                 
                 
+                <input type="hidden" name="receiverManager"  id="receiverManager" value=""/>
+                <input type="hidden" name="receiverMail"  id="receiverMail" value=""/>
                 
                 <div style="clear: both;">
                 <input type="hidden" name="manager"  id="manager" value="<?php echo $manager; ?>"/>
