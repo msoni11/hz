@@ -126,20 +126,36 @@ function newuser() {
 		die;
 	} else if (isset($_REQUEST['uname']) && isset($_REQUEST['password']) && isset($_REQUEST['location'])) {
 		$db = new cDB();
+		$db1 = new cDB();
 		$uname = $_REQUEST['uname'];
 		$password = $_REQUEST['password'];
 		$usertype = $_REQUEST['location'];
 		if (($uname != '') && ($password != '') && ($usertype != '')) {
-			$sqlselect = "SELECT * FROM hz_users WHERE username='".$uname."' AND ldapID=".$usertype;
+			$sqlselect = "SELECT * FROM hz_users WHERE username='".$uname."'";
 			$db->Query($sqlselect);
 			if ($db->RowCount) {
 				echo "102"; //User already exists;
 				die();
 			} else {
-				$sql = "INSERT INTO hz_users(username,password,isadmin,ldapID) 
-						VALUES('".$uname."','".$password."','1', ".$usertype.")";
+				$sql = "INSERT INTO hz_users(username,password,isadmin) 
+						VALUES('".$uname."','".$password."','1')";
 				$db->Query($sql);
-				if ($db->LastInsertID) {
+				if ($adminid = $db->LastInsertID) {
+					$locations = explode(',', $usertype);
+					foreach ($locations as $location) {
+						$sql = "INSERT INTO hz_admin_allowed_location(adminID,ldapID) 
+								VALUES('".$adminid."',".$location.")";
+						$db1->Query($sql);
+						if (!$db1->LastInsertID) {
+							$deleteSql = 'DELETE FROM hz_users WHERE id ='.$adminid;
+							$db1->Query($sql);
+							$deleteSql = 'DELETE FROM hz_admin_allowed_location WHERE adminID ='.$adminid;
+							$db1->Query($deleteSql);
+							echo "103"; //status false. Error inserting into database.
+							exit();
+						}
+						
+					}
 					echo "0"; //status true.Show success message
 					die();
 				} else {

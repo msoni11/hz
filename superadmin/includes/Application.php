@@ -17,8 +17,8 @@ error_reporting(0);
 $appDBHost					= 'localhost';
 $appDBUser					= 'root';
 $appDBPassword				= '';
-$appDBDatabase				= 'inventory';
+$appDBDatabase				= 'inventory1';
 
 require '_incClass_mySQL.php';
-//require '_incGlobalFunctions.php';
+require '_incGlobalFunctions.php';
 ?>

@@ -45,7 +45,8 @@ include 'includes/Application.php';
 			<div id="nav" class="box1">
 				<ul>
 					<!--<li><a href="admin_home.php">HOME</a></li>-->
-					<li><a href="addUser.php">&nbsp;</a></li>
+					<li><a href="settings.php">Add location</a></li>
+					<li><a href="addUser.php">Add new admin</a></li>
 				</ul>
 				<hr class="noscreen" />
 			</div>
