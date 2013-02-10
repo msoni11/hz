@@ -6,8 +6,10 @@ include 'includes/mail_sender.php';
 $db = new cDB();
 $db1 = new cDB();
  	$resultarr = array();
+    
     $getSql = $db->Query("SELECT * FROM hz_transfer_requests,hz_employees WHERE requestID=".$_REQUEST["request_id"]." AND hz_employees.empid = hz_transfer_requests.EmployeeID ");
-		if ($db->RowCount) {
+
+    	if ($db->RowCount) {
 		 $db->ReadRow();
          $resultarr = $db->RowData;
 			}
@@ -22,8 +24,10 @@ $db1 = new cDB();
 //echo "<pre>";
 //print_r($resultarr);
 //print_r($requestor_details);
-//echo "</pre>";
+//echo "</pre>";            
+if(count($resultarr)>0 && count($requestor_details)>0 )            
 
+{
 //first manager responce
 if(isset($_REQUEST["mapproved"]) && !empty($_REQUEST["request_id"]))
 {
@@ -85,7 +89,7 @@ if(isset($_REQUEST["reapproved"]) && !empty($_REQUEST["request_id"]))
         			if($db1->Query($sql))
                     {
                         $reapproved=1;
-                        if(sendMailToSecondManager($resultarr["Email"],"Adminstrator@hz.com","New Asset Transfer Request",$resultarr,$requestor_details))
+                        if(sendMailToSecondManager($resultarr["ReceiversManagerMail"],"Adminstrator@hz.com","New Asset Transfer Request",$resultarr,$requestor_details))
                         {
                             $reapproved++;
                         }//send email to HOD
@@ -128,7 +132,7 @@ if(isset($_REQUEST["smapproved"]) && !empty($_REQUEST["request_id"]))
             {
                 $req_id = $_REQUEST["request_id"];
                	$db1 = new cDB();
-    			$sql = "UPDATE hz_asset_requests SET Status = 3 WHERE  requestID = ".$req_id;
+    			$sql = "UPDATE hz_transfer_requests SET Status = 3 WHERE  requestID = ".$req_id;
     			if($db1->Query($sql))
                 {
                     $smapproved=1;
@@ -234,7 +238,11 @@ if(isset($_REQUEST["txtreason"]))
     
     
 }
-
+}
+else
+{
+    $data_not_found =1;
+}
 
 
 ?>
@@ -373,6 +381,11 @@ if(isset($_REQUEST["txtreason"]))
         {
             echo "<div style='text-align:center;'><h2>Error Rejecting Request, Please try again later!</h2></div>";
         }
+   }
+   
+   if($data_not_found==1)
+   {
+     echo "<div style='text-align:center;min-height:300px;'><h2>Requestor/Receivers Data Not Found!</h2></div>";
    }
    
    if($ask_reason==1)

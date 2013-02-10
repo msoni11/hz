@@ -246,8 +246,8 @@ function sendRequestorMail($to,$from,$subject,$empid,$emp_name,$emp_dept,$emp_de
 
 $url = explode("/",$_SERVER["SCRIPT_NAME"]);
 
-$approve_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/tresponse.php?happroved=1&request_id=".$new;
-$reject_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/tresponse.php?happroved=0&request_id=".$new;
+$approve_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/tresponse.php?mapproved=1&request_id=".$new;
+$reject_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/tresponse.php?mapproved=0&request_id=".$new;
 if($_REQUEST["have_assets"]==1) $have = "YES" ; else $have ="NO";
 if($_REQUEST["type"]==1) $type = "EXECUTIVE" ; else $type ="NON-EXECUTIVE";
 

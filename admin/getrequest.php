@@ -249,6 +249,30 @@ function getassetdetails() {
 	}
 }
 
+function getassetcode()
+{
+    $serial_id = $_REQUEST["serial_id"];
+    
+    if($serial_id)
+    {
+       $db = new cDB();
+		$resultarr = array();
+       
+		$getSql = $db->Query("SELECT * FROM `hz_products` WHERE `productID`=$serial_id");
+        echo $getSql;
+       if ($db->RowCount) {
+			while ($db->ReadRow()) {
+				$resultarr[$db->RowData['productID']] = strtoupper($db->RowData['asset_code']);
+			}
+			echo json_encode($resultarr);
+		} else {
+			echo "102"; // id doesn't exist
+		}
+    }
+}
+
+
+
 if (isset($_REQUEST['functype'])) {
 	switch ($_REQUEST['functype']) {
 		case 'getemake':
@@ -301,6 +325,10 @@ if (isset($_REQUEST['functype'])) {
 		
         case 'getassetdetails':
 		getassetdetails();
+		break;
+        
+         case 'getassetcode':
+		getassetcode();
 		break;
 
 		default:

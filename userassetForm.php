@@ -100,6 +100,23 @@ $("document").ready(function(){
            }
            
         });
+        
+        console.log("functype=getassetcode&serial_id="+cpu_serial);
+        $.ajax({
+            url:"getrequest.php",
+            type:"post",
+           data:"functype=getassetcode&serial_id="+cpu_serial,
+           success: function(result)
+           {
+            	var arr = $.parseJSON(result);
+                $("#txtasset").empty();
+                $.each(arr,function(key,val){
+                    $("#txtasset").append(val);
+                });
+           }
+          
+           
+        });
     });
     
 });
@@ -286,16 +303,17 @@ $("document").ready(function(){
 
 				<div class="text-box-name">Asset Code:</div>
 				<div class="text-box-field">
-					<select name="txtasset" id = "txtasset"  class="form-text" style="width:91%" >
-						<option value='-1'>----Select Asset Code----</option>
-						<?php 
+				<input type="text" name="txtasset" id = "txtasset"  class="form-text" size="30" maxlength="2048" disabled="disabled" />		
+                <!--	<select name="txtasset" id = "txtasset"  class="form-text" style="width:91%" >
+						<option value='-1'>---Select Asset Code----</option>
+					<!--	<?php 
 						foreach ($assetcode as $ac){
 							echo '<option value="'.$unitcode.$ac.'">'.$unitcode.$ac.'/</option>';
 						}
 						?>
 						<option value='other'>Other</option>
 						<option value="NONE">NONE</option>
-					</select>
+					</select> -->
 				</div>
 				<div class="text-box-field"><div id="assettext"></div></div>
 

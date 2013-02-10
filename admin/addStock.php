@@ -5,7 +5,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 1) {
 	header("Location:logout.php");
 }
 
-$admin = ($_SESSION["adminid"]) ? $_SESSION["adminid"]: "1";
+$admin = ($_SESSION["adminid"]) ? $_SESSION["adminid"]: "6";
 ?>
 
 <!-- Navbar start -->

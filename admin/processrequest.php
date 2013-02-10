@@ -608,7 +608,7 @@ function newstock() {
 		   isset($stockrcvrname) && isset($stockquantity) && isset($stockrate) && isset($stockotherstatus) && isset($stockentrytype)) {
 		if (($stockdepartment != '') && ($stockhardware != '' || $stockhardware == '0') && ($stockmake != '' || $stockmake == 0) && ($stockmodel != '' || $stockmodel == 0) &&
 		    ($stockinvoice != '') && ($stockday != '') && ($stockmonth != '') && ($stockyear != '') &&
-		    ($stockpartyname != '') && ($stockrcvrname != '') && ($stockquantity != '') && ($stockrate != '') && ($stockotherstatus != '') && ($stockentrytype != '')) {
+		    ($stockpartyname != '') && ($stockrcvrname != '') && ($stockquantity != '') && ($stockrate != '') && ($stockotherstatus != '') && ($stockentrytype != '') && ($admin != '')) {
 			$db = new cDB();
 			if ($stockhardware == '0') {
 				$db->Query("SELECT * FROM hz_hardware WHERE name='".$stockaddhardware."'");
@@ -700,6 +700,9 @@ function newstock() {
 			} else {
 				$modelid = $stockmodel;
 			}
+            
+            
+            
 			$orderdate = mktime(0,0,0,$stockmonth,$stockday,$stockyear);
 			$sql = "INSERT INTO hz_stock(department,hardware,type,make,model,invoiceno,orderdate,partyname,receivername,quantity,rate,otherstatus,entrytype,adminID) 
 					VALUES('".$stockdepartment."','".$hwid."',
@@ -713,15 +716,36 @@ function newstock() {
 			$db->Query($sql);
             
             	if ($stockID = $db->LastInsertID) {
+            	   
+                   
+               //building Assets code
+               
+               $sql = "SELECT location FROM config_ldap WHERE id IN (SELECT ldapID FROM hz_users WHERE id =".$admin.")";
+                $db->Query($sql);
+					if ($db->RowCount) {
+						if ($db->ReadRow()) {
+							$admin_location = $db->RowData['location'];
+						}
+                        }
+                 $sql = "SELECT code FROM hz_hardware WHERE id=".$stockhardware;
+                $db->Query($sql);
+					if ($db->RowCount) {
+						if ($db->ReadRow()) {
+							$hardware_code = $db->RowData['code'];
+						}
+                        }  
+                   
+                        
+                 $asset_code = $admin_location."/".$hardware_code."/".$stockinvoice."/".$stockyear."/" ;   
 				//populating products table
                 if(count($serials)>0)
                 {
-                    $insert_sql = "INSERT INTO hz_products(stockID,serial,status) VALUES ";
+                    $insert_sql = "INSERT INTO hz_products(stockID,serial,status,asset_code) VALUES ";
                         $values="";
                         $c=0;
                         foreach($serials as $val)
                         {
-                            $values.="( $stockID , '".$val."' , 1 )";
+                            $values.="( $stockID , '".$val."' , 1 , '".$asset_code.$val."' )";
                             if($c!=count($serials)-1)
                             {
                                 $values.=" , ";
@@ -750,12 +774,12 @@ function newstock() {
 						}
                     }
                     
-                     $insert_sql = "INSERT INTO hz_products(stockID,configurationID,serial,status) VALUES ";
+                     $insert_sql = "INSERT INTO hz_products(stockID,configurationID,serial,status,asset_code) VALUES ";
                         $values="";
                         $c=0;
                         foreach($cpu_serials as $val)
                         {
-                            $values.="( $stockID , $config,'".$val."' , 1 )";
+                            $values.="( $stockID , $config,'".$val."' , 1,'".$asset_code.$val."'  )";
                             if($c!=count($cpu_serials))
                             {
                                 $values.=" , ";
@@ -765,7 +789,7 @@ function newstock() {
                         $c=0;
                         foreach($m_serials as $val)
                         {
-                            $values.="( $stockID , 0,'".$val."' , 1 )";
+                            $values.="( $stockID , 0,'".$val."' , 1,'".$asset_code.$val."' )";
                             if($c!=count($m_serials)-1)
                             {
                                 $values.=" , ";
