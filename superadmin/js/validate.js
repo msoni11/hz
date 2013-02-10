@@ -11,7 +11,6 @@ $("document").ready(function(){
 		var uname     = $.trim($("#txtusername").val());
         var password    = $.trim($("#txtpassword").val());
         var adlocation    = encodeURIComponent(($.trim($("#txtlocation").val())));
-console.log(hasWhiteSpace(uname));
         if (uname == '') {
 			$("#loader").hide();
             alert('Enter valid username');
@@ -24,7 +23,7 @@ console.log(hasWhiteSpace(uname));
 			$("#loader").hide();
             alert('Enter valid password');
 			return;
-        } else if (adlocation == '' || adlocation == null) {
+        } else if (adlocation == '-1') {
 			$("#loader").hide();
             alert('Select location');
 			return;

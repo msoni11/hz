@@ -63,26 +63,26 @@ function save_settings()
             alert('Enter Password');
             $("#cfg_password").focus();
 			return;
+        }/* else if (usertype == '-1') {
+			$("#loader").hide();
+            alert('Select User Type');
+            $("#cfg_usertype").focus();
+			return;
+        }*/ else if (contexts == '') {
+			$("#loader").hide();
+            alert('Enter Contexts');
+            $("#cfg_contexts").focus();
+            return;
         } else if (location == '') {
 			$("#loader").hide();
             alert('Enter location');
             $("#cfg_location").focus();
 			return;
-		}/* else if (usertype == '-1') {
-			$("#loader").hide();
-            alert('Select User Type');
-            $("#cfg_usertype").focus();
-			return;
-        } else if (contexts == '') {
-			$("#loader").hide();
-            alert('Enter Contexts');
-            $("#cfg_contexts").focus();
-            return;
-        }*/
+		}
         
         myData = "functype=newLdapEntry&hosturl=" + cfg_host + "&version=" +cfg_ver + "&ldapencoding=" + encoding + 
 				  "&accountsuffix=" + suffix + "&basedn=" + dn +
-				  "&adminusername=" + username + "&password=" + password + "&location=" + location;
+				  "&adminusername=" + username + "&password=" + password + "&contexts="+ contexts +"&location=" + location;
                   
                   //console.log(myData);
         $.ajax({
@@ -181,31 +181,32 @@ function save_settings()
 					</div>
 					<div class="text-box-field"></div>
 
+				</fieldset>
+				
+				<!-- User Lookup Settings-->
+                <fieldset>
+					<legend>User Lookup Settings</legend>
+					
+					<!-- <div class="text-box-name">User Type:</div>
+					<div class="text-box-field">
+						<select name="cfg_usertype" id = "cfg_usertype"  class="form-text" style="width:91%" >
+							<option value='ad'>MS Active Directory</option>
+						</select>			
+					</div>
+					<div class="text-box-field"></div>-->
+					
+					<div class="text-box-name">Contexts:</div>
+					<div class="text-box-field">
+						<input type="text" name="cfg_contexts" id="cfg_contexts" value="" class="form-text" size="30" maxlength="2048" />
+					</div>
+					<div class="text-box-field">Multiple context seperated by ;</div>
+
 					<div class="text-box-name">Location Name:</div>
 					<div class="text-box-field">
 						<input type="text" name="cfg_location" id="cfg_location" value="" class="form-text" size="30" maxlength="2048" />
 					</div>
 					<div class="text-box-field"></div>
 				</fieldset>
-				
-				<!-- User Lookup Settings-->
-                <!--<fieldset>
-					<legend>User Lookup Settings</legend>
-					
-					<div class="text-box-name">User Type:</div>
-					<div class="text-box-field">
-						<select name="cfg_usertype" id = "cfg_usertype"  class="form-text" style="width:91%" >
-							<option value='ad'>MS Active Directory</option>
-						</select>			
-					</div>
-					<div class="text-box-field"></div>
-					
-					<div class="text-box-name">Contexts:</div>
-					<div class="text-box-field">
-						<input type="password" name="cfg_contexts" id="cfg_contexts" value="" class="form-text" size="30" maxlength="2048" />
-					</div>
-					<div class="text-box-field"></div>
-				</fieldset>-->
 			
 				<input type="button" name="cfg_settings" id="cfg_settings" value="submit" style="width:80px; height:30px;margin-left:90px" /> 
 				<input type="reset" name="txtempreset" id="txtempreset" value="Reset" style="width:80px; height:30px;" />

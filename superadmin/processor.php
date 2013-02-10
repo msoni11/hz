@@ -90,17 +90,18 @@ function newLdapEntry() {
 	$basedn        = trim($_REQUEST['basedn']);
 	$adminusername = trim($_REQUEST['adminusername']);
 	$password      = $_REQUEST['password'];
+	$contexts      = $_REQUEST['contexts'];
 	$location      = trim($_REQUEST['location']);
 	
 	if (!isset($_SESSION['username'])) {
 		echo "101"; // Session expires! Login again
 		die;
-	} else if (isset($hosturl) && isset($version) && isset($ldapencoding) && isset($accountsuffix) && isset($basedn) && isset($adminusername) && isset($password) && isset($location)) {
-		if (($hosturl != '') && ($version != '') && (is_numeric($version)) && ($ldapencoding != '') && ($accountsuffix != '') && ($basedn != '') && ($adminusername != '') && ($password != '') && ($location != '')) {
+	} else if (isset($hosturl) && isset($version) && isset($ldapencoding) && isset($accountsuffix) && isset($basedn) && isset($adminusername) && isset($password) && isset($contexts) && isset($location)) {
+		if (($hosturl != '') && ($version != '') && (is_numeric($version)) && ($ldapencoding != '') && ($accountsuffix != '') && ($basedn != '') && ($adminusername != '') && ($password != '') && ($contexts != '') && ($location != '')) {
 			$db = new cDB();
 			$db1 = new cDB();
-			$sql = "INSERT INTO config_ldap(hostUrl,version,ldapEncoding,accountSuffix,baseDN,userName,password,location) 
-					VALUES('".$hosturl."','".$version."','".$ldapencoding."','".$accountsuffix."','".$basedn."','".$adminusername."','".$password."','".$location."')";
+			$sql = "INSERT INTO config_ldap(hostUrl,version,ldapEncoding,accountSuffix,baseDN,userName,password,contexts,location) 
+					VALUES('".$hosturl."','".$version."','".$ldapencoding."','".$accountsuffix."','".$basedn."','".$adminusername."','".$password."','".$contexts."','".$location."')";
 			$db1->Query($sql);
 			if ($db1->LastInsertID) {
 				echo "0"; //status true.Show success message
@@ -120,7 +121,7 @@ function newLdapEntry() {
 }
 
 // function definition : New admin entry
-function newuser() {
+/*function newuser() {
 	if (!isset($_SESSION['username'])) {
 		echo "101"; // Session expires! Login again
 		die;
@@ -171,8 +172,44 @@ function newuser() {
 		echo "104";//Internal update error
 		die();
 	}
+}*/
+function newuser() {
+	if (!isset($_SESSION['username'])) {
+		echo "101"; // Session expires! Login again
+		die;
+	} else if (isset($_REQUEST['uname']) && isset($_REQUEST['password']) && isset($_REQUEST['location'])) {
+		$db = new cDB();
+		$db1 = new cDB();
+		$uname = $_REQUEST['uname'];
+		$password = $_REQUEST['password'];
+		$usertype = $_REQUEST['location'];
+		if (($uname != '') && ($password != '') && ($usertype != '')) {
+			$sqlselect = "SELECT * FROM hz_users WHERE username='".$uname."'";
+			$db->Query($sqlselect);
+			if ($db->RowCount) {
+				echo "102"; //User already exists;
+				die();
+			} else {
+				$sql = "INSERT INTO hz_users(username,password,isadmin,ldapID) 
+						VALUES('".$uname."','".$password."','1','".$usertype."')";
+				$db->Query($sql);
+				if ($adminid = $db->LastInsertID) {
+					echo "0"; //status true.Show success message
+					die();
+				} else {
+					echo "103"; //status false. Error inserting into database.
+					die();
+				}
+			}
+		} else {
+			echo "105"; // form field hasn't received by post
+			die();
+		}
+	} else {
+		echo "104";//Internal update error
+		die();
+	}
 }
-
 
 if (isset($_REQUEST['functype'])) {
 	switch ($_REQUEST['functype']) {

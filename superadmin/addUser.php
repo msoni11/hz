@@ -31,7 +31,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 2) {
 				</div>
 				<div class="text-box-field"></div>
 
-				<div class="text-box-name">AD Location:</div>
+				<!-- <div class="text-box-name">AD Location:</div>
 				<?php $db->Query('SELECT id,location FROM config_ldap'); ?>
 				<div class="text-box-field">
 					<select name="txtlocation" id = "txtlocation"  class="form-text" style="width:91%;height:150px" multiple>
@@ -44,8 +44,23 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 2) {
 						?>
 					</select>
 				</div>
-				<div class="text-box-field" style="height:150px;"></div>
+				<div class="text-box-field" style="height:150px;"></div>-->
 
+				<div class="text-box-name">AD Location:</div>
+				<?php $db->Query('SELECT id,location FROM config_ldap'); ?>
+				<div class="text-box-field">
+					<select name="txtlocation" id = "txtlocation"  class="form-text" style="width:91%">
+					<option value="-1">--Select Location--</option>
+						<?php 
+						if ($db->RowCount) {
+							while ($db->ReadRow()) {
+								echo "<option value=".$db->RowData['id']." >".$db->RowData['location']."</option>";
+							}
+						}
+						?>
+					</select>
+				</div>
+				<div class="text-box-field"></div>
 				<input type="button" name="newuserbtn" id="newuserbtn" value="Create Account" style="width:120px; height:30px;margin-left:90px" /> 
 				<input type="reset" name="txtreset" id="txtreset" value="Reset" style="width:80px; height:30px;" />
 				</fieldset>
