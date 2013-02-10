@@ -9,7 +9,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 0) {
 //accesing session data or dumping sample data
 $username = ($_SESSION["adldapinfo"][0]["description"][0]) ? $_SESSION["adldapinfo"][0]["description"][0] : "444444";
 $name = ($_SESSION["adldapinfo"][0]["cn"][0]) ? $_SESSION["adldapinfo"][0]["cn"][0] : "John Doe";
-$dept = ($_SESSION["adldapinfo"][0]["physicaldeliveryofficename"][0]) ? $_SESSION["adldapinfo"][0]["physicaldeliveryofficename"][0] : "CES-IT";
+$dept = ($_SESSION["adldapinfo"][0]["department"][0]) ? $_SESSION["adldapinfo"][0]["department"][0] : "CES-IT";
 $desi = ($_SESSION["adldapinfo"][0]["title"][0]) ? $_SESSION["adldapinfo"][0]["title"][0] : "CEO";
 $manager= ($_SESSION["managermail"][0]["mail"][0]) ? $_SESSION["managermail"][0]["mail"][0] : "him.developer@gmail.com";
 ?>

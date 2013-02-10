@@ -70,11 +70,11 @@ $("document").ready(function(){
 				if (result == 0) {
 					$("#loader").hide();
 					alert('New Request has been added succesfully! Mail NOT Sent');
-					window.location.reload();
+					//window.location.reload();
 				}else if (result == 1){
 					$("#loader").hide();
 					alert('New Request has been added succesfully! Mail Sent');
-					window.location.reload();
+					//window.location.reload();
 				}  else if (result == 101){
 					$("#loader").hide();
 					alert('Session expired! Login again');
@@ -109,10 +109,19 @@ $("document").ready(function(){
     function hz_Trequest() {
 		$("#loader").show();
         var empid           = encodeURIComponent($("#txtempid").val());
+         var empname         = encodeURIComponent($("#txtempname").val());
+        var empdept         = encodeURIComponent($("#txtempdept").val());
+        var empdesi         = encodeURIComponent($("#txtempdesi").val());
        var hardware        = $("#txthardware").val();
         var serial        = $("#txtserial").val();
         var reason          = encodeURIComponent($("#txtreason").val());
         var email          = $("#txtempemailid").val();
+        
+        //requestors
+        var rempid           = encodeURIComponent($("#requestor").val());
+        var rname           = encodeURIComponent($("#requestorname").val());
+        var rdept           = encodeURIComponent($("#requestordept").val());
+        var rdesi           = encodeURIComponent($("#requestordesi").val());
       
 
 	if (empid == '') {
@@ -144,8 +153,9 @@ $("document").ready(function(){
 			return;
         } 
         
-        myData = "functype=newtrequest&empid=" + empid +"&hardware=" + hardware + "&reason=" + reason + "&serial=" + serial +
-                  "&email="+email;
+        myData = "functype=newtrequest&empid=" + empid+ "&empname=" + empname + "&empdept=" + empdept + 
+				  "&empdesi=" + empdesi +"&hardware=" + hardware + "&reason=" + reason + "&serial=" + serial +
+                  "&email="+email+"&manager="+$("#manager").val()+"&requestor="+rempid+"&requestorname="+rname+"&requestordept="+rdept+"&requestordesi="+rdesi;
 				  
         console.log(myData);          
          $.ajax({

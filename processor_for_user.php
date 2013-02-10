@@ -24,7 +24,7 @@ function newrequest() {
 			$db1->Query($sql);
             $new =$db1->LastInsertID;
 				if ($new) {
-			              $mail_sent =  sendMangerMail('mahendra20nov@gmail.com',"Adminstrator@hz.com","New Asset Request",$empid,$emp_name,$emp_dept,$emp_desi,$new);  
+			              $mail_sent =  sendMangerMail($manager,"New Asset Request",$empid,$emp_name,$emp_dept,$emp_desi,$new);  
                           if($mail_sent)
                           {
                             echo "1";
@@ -59,18 +59,18 @@ function newTrequest() {
     $reason      = $_REQUEST["reason"];
     $serial      = $_REQUEST["serial"];
     $email       = $_REQUEST["email"];
-    
+    $manager     =  $_REQUEST["manager"]  ;
+    $requestor     =  $_REQUEST["requestor"]  ;
 	
     if (isset($empid)  && isset($hardware) && isset($reason) && isset($serial) && isset($email) ) {
 		if (($empid != '')   && ($hardware != '') && ($reason != '') && ($serial != '') && ($email != '') ) {
 			$db1 = new cDB();
-			$sql = "INSERT INTO hz_transfer_requests(EmployeeID,HardwareID,TransferReason,ProductID,Email,Status) 
-						VALUES('".$empid."','".$hardware."','".$reason."','".$serial."','".$email."',0)";
+			$sql = "INSERT INTO hz_transfer_requests(RequestorID,EmployeeID,HardwareID,TransferReason,ProductID,Email,Status) 
+						VALUES('".$requestor."','".$empid."','".$hardware."','".$reason."','".$serial."','".$email."',0)";
 			$db1->Query($sql);
             $new =$db1->LastInsertID;
 			if ($new) {
-			              $mail_sent+=   sendRequestorMail($email,"Adminstrator@hz.com","New Asset Transfer Request",$empid,$emp_name,$emp_dept,$emp_desi,$new);  
-                          $mail_sent+=   sendHMail($email,"Adminstrator@hz.com","New Asset Transfer Request",$empid,$emp_name,$emp_dept,$emp_desi,$new); 
+			              $mail_sent= sendRequestorMail($manager,"Adminstrator@hz.com","New Asset Transfer Request",$empid,$emp_name,$emp_dept,$emp_desi,$new);  
                           if($mail_sent)
                           {
                             echo "1";
@@ -141,16 +141,9 @@ function get_user_details()
 	}
 }
 
-function sendMangerMail($to,$from,$subject,$empid,$emp_name,$emp_dept,$emp_desi,$new)
+function sendMangerMail($to,$subject,$empid,$emp_name,$emp_dept,$emp_desi,$new)
 {
-require_once('includes/class.phpmailer.php');
-include("includes/class.smtp.php"); // optional, gets called from within class.phpmailer.php if not already loaded
-
-
-$mail             = new PHPMailer();
-
 $url = explode("/",$_SERVER["SCRIPT_NAME"]);
-
 $approve_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/response.php?mapproved=1&request_id=".$new;
 $reject_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/response.php?mapproved=0&request_id=".$new;
 if($_REQUEST["have_assets"]==1) $have = "YES" ; else $have ="NO";
@@ -216,31 +209,15 @@ $body ='<!DOCTYPE HTML>
 </body>
 </html>';
 $body             = eregi_replace("[\]",'',$body);
-
-$mail->IsSMTP(); // telling the class to use SMTP
-include('includes/config_for_email.php');
-
-//$mail->SetFrom('himanshuzone@gmail.com', 'First Last');
-
-//$mail->AddReplyTo($from,"First Last");
-
-$mail->Subject    = $subject;
-
-$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-
-$mail->MsgHTML($body);
-
-$address = $to;
-$mail->AddAddress($address, "John Doe");
-
-//$mail->AddAttachment("images/phpmailer.gif");      // attachment
-//$mail->AddAttachment("images/phpmailer_mini.gif"); // attachment
-
-if(!$mail->Send()) {
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+$headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
+$mail = mail($to,$subject,$body,$headers);
+if(!$mail) {
     return 0;
-  //echo "Mailer Error: " . $mail->ErrorInfo;
+  
 } else {
-  //echo "Message sent!";
+  
   return 1;
 }
 
@@ -248,11 +225,6 @@ if(!$mail->Send()) {
 
 function sendRequestorMail($to,$from,$subject,$empid,$emp_name,$emp_dept,$emp_desi,$new)
 {
-require('includes/class.phpmailer.php');
-include("includes/class.smtp.php"); // optional, gets called from within class.phpmailer.php if not already loaded
-
-
-$mail             = new PHPMailer();
 
 $url = explode("/",$_SERVER["SCRIPT_NAME"]);
 
@@ -276,22 +248,46 @@ $body ='<!DOCTYPE HTML>
 
 <body>
 <table>
-<tr><td colspan="2">New asset request received with following details:</td></tr>
+<tr><td colspan="2">New asset transfer request received with following details:</td></tr>
+<tr><td colspan="2">-------------------------------------------------------------</td></tr>
+<tr><td colspan="2"><strong>Requestor\'s Details:</strong></td></tr>
+<tr>
+    <td>Employee ID/Usernmae:</td>
+    <td>'.$_REQUEST["requestor"].'</td>
+</tr>
+<tr>
+    <td>Employee Name:</td>
+    <td>'.$_REQUEST["requestorname"].'</td>
+</tr>
+<tr>
+    <td>Employee Department:</td>
+    <td>'.$_REQUEST["requestordept"].'</td>
+</tr>
+<tr>
+    <td>Employee Designation:</td>
+    <td>'.$_REQUEST["requestordesi"].'</td>
+</tr>
+<tr>
+<tr><td colspan="2"></td></tr>
+<tr><td colspan="2"><strong>Receiver\'s Details:</strong></td></tr>
+
+
+
 <tr>
     <td>Employee ID/Usernmae:</td>
     <td>'.$empid.'</td>
 </tr>
 <tr>
     <td>Employee Name:</td>
-    <td>'.$emp_name.'</td>
+    <td>'.$_REQUEST["empname"].'</td>
 </tr>
 <tr>
     <td>Employee Department:</td>
-    <td>'.$emp_dept.'</td>
+    <td>'.$_REQUEST["empdept"].'</td>
 </tr>
 <tr>
     <td>Employee Designation:</td>
-    <td>'.$emp_desi.'</td>
+    <td>'.$_REQUEST["empdesi"].'</td>
 </tr>
 <tr>
     <td>Hardware:</td>
@@ -302,15 +298,7 @@ $body ='<!DOCTYPE HTML>
 <td>'.$_REQUEST["reason"].'</td>
 </tr>
 
-<tr>
-<td>Have Asstes?</td>
-<td>'.$have.'</td>
-</tr>
 
-<tr>
-<td>Type:</td>
-<td>'.$type.'</td>
-</tr>
 <tr><td></td></tr>
 <tr><td></td><td><a href="'.$approve_url.'">Approve</a>&nbsp;&nbsp;<a href="'.$reject_url.'">Reject</a></td></tr>
 </table>
@@ -322,26 +310,12 @@ $body ='<!DOCTYPE HTML>
 </html>';
 $body             = eregi_replace("[\]",'',$body);
 
-$mail->IsSMTP(); // telling the class to use SMTP
-include('includes/config_for_email.php');
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+$headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
+$mail = mail($to,$subject,$body,$headers);
 
-//$mail->SetFrom('himanshuzone@gmail.com', 'First Last');
-
-//$mail->AddReplyTo($from,"First Last");
-
-$mail->Subject    = $subject;
-
-$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-
-$mail->MsgHTML($body);
-
-$address = $HOD_email ;
-$mail->AddAddress($address, "John Doe");
-
-//$mail->AddAttachment("images/phpmailer.gif");      // attachment
-//$mail->AddAttachment("images/phpmailer_mini.gif"); // attachment
-
-if(!$mail->Send()) {
+if(!$mail) {
     return 0;
   //echo "Mailer Error: " . $mail->ErrorInfo;
 } else {

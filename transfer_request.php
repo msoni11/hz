@@ -9,7 +9,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 0) {
 //accesing session data or dumping sample data
 $username = ($_SESSION["adldapinfo"][0]["description"][0]) ? $_SESSION["adldapinfo"][0]["description"][0] : "444444";
 $name = ($_SESSION["adldapinfo"][0]["cn"][0]) ? $_SESSION["adldapinfo"][0]["cn"][0] : "John Doe";
-$dept = ($_SESSION["adldapinfo"][0]["physicaldeliveryofficename"][0]) ? $_SESSION["adldapinfo"][0]["physicaldeliveryofficename"][0] : "CES-IT";
+$dept = ($_SESSION["adldapinfo"][0]["department"][0]) ? $_SESSION["adldapinfo"][0]["department"][0] : "CES-IT";
 $desi = ($_SESSION["adldapinfo"][0]["title"][0]) ? $_SESSION["adldapinfo"][0]["title"][0] : "CEO";
 $manager= ($_SESSION["managermail"][0]["mail"][0]) ? $_SESSION["managermail"][0]["mail"][0] : "him.developer@gmail.com";
 
@@ -92,19 +92,19 @@ $("#txtempid").keyup(function(){
 				
 				<div class="text-box-name">Employee Name:</div>
 				<div class="text-box-field">
-					<input type="text" name="txtempname" id="txtempname" value="" class="form-text" size="30" maxlength="2048" disabled="disabled" />				
+					<input type="text" name="txtempname" id="txtempname" value="" class="form-text" size="30" maxlength="2048"  />				
 				</div>
 				<div class="text-box-field"></div>
                 
                 <div class="text-box-name">Department:</div>
 				<div class="text-box-field">
-					<input type="text" name="txtempdept" id="txtempdept" value="" class="form-text" size="30" maxlength="2048" disabled="disabled" />				
+					<input type="text" name="txtempdept" id="txtempdept" value="" class="form-text" size="30" maxlength="2048"  />				
 				</div>
 				<div class="text-box-field"></div>
                 
                 <div class="text-box-name">Desination:</div>
 				<div class="text-box-field">
-					<input type="text" name="txtempdesi" id="txtempdesi" value="" class="form-text" size="30" maxlength="2048" disabled="disabled" />				
+					<input type="text" name="txtempdesi" id="txtempdesi" value="" class="form-text" size="30" maxlength="2048"  />				
 				</div>
 				<div class="text-box-field"></div>
                 
@@ -161,6 +161,10 @@ $("#txtempid").keyup(function(){
                 
                 <div style="clear: both;">
                 <input type="hidden" name="manager"  id="manager" value="<?php echo $manager; ?>"/>
+                <input type="hidden" name="requestor" id="requestor" value="<?php echo $username; ?>" />
+                <input type="hidden" name="requestorname" id="requestorname" value="<?php echo $name; ?>" />
+                <input type="hidden" name="requestordept" id="requestordept" value="<?php echo $dept; ?>" />
+                <input type="hidden" name="requestordesi" id="requestordesi" value="<?php echo $desi; ?>" />
 				<input type="button" name="newTrequest" id="newTrequest" value="submit" style="width:80px; height:30px;margin-left:90px" /> 
 				<input type="reset" name="txtempreset" id="txtempreset" value="Reset" style="width:80px; height:30px;" />
 				</div>
