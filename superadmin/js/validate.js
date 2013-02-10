@@ -1,5 +1,7 @@
 $("document").ready(function(){
-
+	function hasWhiteSpace(s) {
+	  return /\s/g.test(s);
+	}
 // js for new user form |start|
     $("#newuserbtn").live('click', function(){
 		hz_newuser();
@@ -8,16 +10,21 @@ $("document").ready(function(){
 		$("#loader").show();
 		var uname     = $.trim($("#txtusername").val());
         var password    = $.trim($("#txtpassword").val());
-        var adlocation    = $("#txtlocation").val();
+        var adlocation    = encodeURIComponent(($.trim($("#txtlocation").val())));
+console.log(hasWhiteSpace(uname));
         if (uname == '') {
 			$("#loader").hide();
             alert('Enter valid username');
+			return;
+        } else if(hasWhiteSpace(uname)) {
+			$("#loader").hide();
+            alert('Username is not valid');
 			return;
         } else if (password == '') {
 			$("#loader").hide();
             alert('Enter valid password');
 			return;
-        } else if (adlocation == '-1') {
+        } else if (adlocation == '' || adlocation == null) {
 			$("#loader").hide();
             alert('Select location');
 			return;
@@ -31,7 +38,7 @@ $("document").ready(function(){
                 if (result == 0) {
 					$("#loader").hide();
 					alert('new admin added');
-					window.location.reload();
+					//window.location.reload();
 				} else if (result == 103) {
 					$("#loader").hide();
 					alert('Error inserting user entry!');
