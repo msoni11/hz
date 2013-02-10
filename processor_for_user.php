@@ -53,20 +53,23 @@ function newrequest() {
 function newTrequest() {
 	$empid       = $_REQUEST['empid'];
     $emp_name    = $_REQUEST['empname'];
-    $emp_dept  = $_REQUEST['empdept'];
-    $emp_desi  = $_REQUEST['empdesi'];
+    $emp_dept    = $_REQUEST['empdept'];
+    $emp_desi    = $_REQUEST['empdesi'];
 	$hardware    = $_REQUEST["hardware"];
     $reason      = $_REQUEST["reason"];
     $serial      = $_REQUEST["serial"];
     $email       = $_REQUEST["email"];
-    $manager     =  $_REQUEST["manager"]  ;
-    $requestor     =  $_REQUEST["requestor"]  ;
+    $manager     = $_REQUEST["manager"]  ;
+    $requestor   = $_REQUEST["requestor"]  ;
+    
+    $rmanagermail= $_REQUEST["rmanagermail"];
+    
 	
     if (isset($empid)  && isset($hardware) && isset($reason) && isset($serial) && isset($email) ) {
 		if (($empid != '')   && ($hardware != '') && ($reason != '') && ($serial != '') && ($email != '') ) {
 			$db1 = new cDB();
-			$sql = "INSERT INTO hz_transfer_requests(RequestorID,EmployeeID,HardwareID,TransferReason,ProductID,Email,Status) 
-						VALUES('".$requestor."','".$empid."','".$hardware."','".$reason."','".$serial."','".$email."',0)";
+			$sql = "INSERT INTO hz_transfer_requests(RequestorID,EmployeeID,HardwareID,TransferReason,ProductID,Email,ReceiversManagerMail,Status) 
+						VALUES('".$requestor."','".$empid."','".$hardware."','".$reason."','".$serial."','".$email."','".$rmanagermail."',0)";
 			$db1->Query($sql);
             $new =$db1->LastInsertID;
 			if ($new) {

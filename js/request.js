@@ -122,7 +122,10 @@ $("document").ready(function(){
         var rname           = encodeURIComponent($("#requestorname").val());
         var rdept           = encodeURIComponent($("#requestordept").val());
         var rdesi           = encodeURIComponent($("#requestordesi").val());
-      
+        var rmail           = encodeURIComponent($("#receiverMail").val());
+        var rmanagermail           = encodeURIComponent($("#receiverManager").val());
+        
+     
 
 	if (empid == '') {
 			$("#loader").hide();
@@ -155,7 +158,8 @@ $("document").ready(function(){
         
         myData = "functype=newtrequest&empid=" + empid+ "&empname=" + empname + "&empdept=" + empdept + 
 				  "&empdesi=" + empdesi +"&hardware=" + hardware + "&reason=" + reason + "&serial=" + serial +
-                  "&email="+email+"&manager="+$("#manager").val()+"&requestor="+rempid+"&requestorname="+rname+"&requestordept="+rdept+"&requestordesi="+rdesi;
+                  "&email="+email+"&manager="+$("#manager").val()+"&requestor="+rempid+"&requestorname="+rname+"&requestordept="+rdept+"&requestordesi="+rdesi
+                  +"&rmail="+rmail+"&rmanagermail="+rmanagermail;
 				  
         console.log(myData);          
          $.ajax({
@@ -291,6 +295,7 @@ $("document").ready(function(){
 						$("#txtempdesi").val(arr['designation'])
 										    .attr('disabled', 'disabled');
 						$("#receiverMail").val(arr['empmail']);
+                        $("#txtempemailid").val(arr['empmail']);
 						$("#receiverManager").val(arr['mgrmail']);
 					}
 				}
