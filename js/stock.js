@@ -437,9 +437,10 @@ $("#txtstockreset").click(function(){
                             }).get();
               myData+="&serials="+serials;
              } 
-              //console.log(myData);
+             myData += "&admin="+admin;
+              console.log(myData);
               //return false;
-              myData += "&admin="+admin;
+              
           $.ajax({
             url:"processrequest.php",
             type:"post",
