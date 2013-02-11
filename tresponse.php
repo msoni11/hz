@@ -55,8 +55,22 @@ if(isset($_REQUEST["mapproved"]) && !empty($_REQUEST["request_id"]))
                 }
                 elseif($_REQUEST["mapproved"]==0)
                 {
-                    $ask_reason = 1;
-                    $who = "fm";
+                    $req_id = $_REQUEST["request_id"];
+                    $status =0 ;$who_rejected="FirstManagerRejected";$to=$requestor_details["email"];$whos_reason="FirstManagerRejectMsg"; $by=" by Manager"; 
+                    $db1 = new cDB();
+        			$sql = "UPDATE hz_transfer_requests SET Status=$status,".$who_rejected."=1 WHERE  requestID = ".$req_id;
+        			if($db1->Query($sql))
+                    {
+                        $rejected=1;
+                        if(sendMailToEmp($to,"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected ".$by))//send mail to employee
+                        {
+                           $rejected++; 
+                        } 
+                    }
+                    else
+                    {
+                       $rejected=0;
+                    }
         
                 }
                 
@@ -102,8 +116,22 @@ if(isset($_REQUEST["reapproved"]) && !empty($_REQUEST["request_id"]))
                 }
                 elseif($_REQUEST["reapproved"]==0)
                 {
-                    $ask_reason = 1;
-                    $who = "re";
+                        $req_id = $_REQUEST["request_id"];
+                        $status =1 ;$who_rejected="ReceiverRejected";$to=$requestor_details["email"];$whos_reason="ReceiverRejectMsg";$by="by Receiver";
+                        $db1 = new cDB();
+            			$sql = "UPDATE hz_transfer_requests SET Status=$status,".$who_rejected."=1 WHERE  requestID = ".$req_id;
+            			if($db1->Query($sql))
+                        {
+                            $rejected=1;
+                            if(sendMailToEmp($to,"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected ".$by))//send mail to employee
+                            {
+                               $rejected++; 
+                            } 
+                        }
+                        else
+                        {
+                           $rejected=0;
+                        }
         
                 }
                 
@@ -149,8 +177,22 @@ if(isset($_REQUEST["smapproved"]) && !empty($_REQUEST["request_id"]))
             }
             elseif($_REQUEST["smapproved"]==0)
             {
-                $ask_reason = 1;
-                $who = "sm";
+                    $req_id = $_REQUEST["request_id"];
+                    $status =2 ;$who_rejected="SecondManagerRejected";$to=$requestor_details["email"]." , ".$resultarr["email"];$whos_reason="SecondManagerRejectMsg";$by="by Receivers Manager";
+                    $db1 = new cDB();
+        			$sql = "UPDATE hz_transfer_requests SET Status=$status,".$who_rejected."=1 WHERE  requestID = ".$req_id;
+        			if($db1->Query($sql))
+                    {
+                        $rejected=1;
+                        if(sendMailToEmp($to,"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected ".$by))//send mail to employee
+                        {
+                           $rejected++; 
+                        } 
+                    }
+                    else
+                    {
+                       $rejected=0;
+                    }
     
             }
         }
@@ -194,8 +236,22 @@ if(isset($_REQUEST["happroved"]) && !empty($_REQUEST["request_id"]))
                 }
                 elseif($_REQUEST["happroved"]==0)
                 {
-                    $ask_reason = 1;
-                    $who = "HOD";
+                        $req_id = $_REQUEST["request_id"];
+                        $status =3 ;$who_rejected="HodRejected";$to=$requestor_details["email"]." , ".$resultarr["email"];$whos_reason="HodRejectMsg"; $by=" HOD";
+                       	$db1 = new cDB();
+            			$sql = "UPDATE hz_transfer_requests SET Status=$status,".$who_rejected."=1 WHERE  requestID = ".$req_id;
+            			if($db1->Query($sql))
+                        {
+                            $rejected=1;
+                            if(sendMailToEmp($to,"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected ".$by))//send mail to employee
+                            {
+                               $rejected++; 
+                            } 
+                        }
+                        else
+                        {
+                           $rejected=0;
+                        }
                     
                 }
         }
@@ -212,32 +268,6 @@ if(isset($_REQUEST["happroved"]) && !empty($_REQUEST["request_id"]))
         }
 }
 
-
-if(isset($_REQUEST["txtreason"]))
-{
-            $req_id = $_REQUEST["request_id"];
-            
-            if($_REQUEST["who_rejected"]=='fm') {$status =0 ;$who_rejected="FirstManagerRejected";$to=$requestor_details["email"];$whos_reason="FirstManagerRejectMsg"; $by=" by Manager"; }
-            if($_REQUEST["who_rejected"]=='re') {$status =1 ;$who_rejected="ReceiverRejected";$to=$requestor_details["email"];$whos_reason="ReceiverRejectMsg";$by="by Receiver";}
-            if($_REQUEST["who_rejected"]=='sm') {$status =2 ;$who_rejected="SecondManagerRejected";$to=$requestor_details["email"]." , ".$resultarr["email"];$whos_reason="SecondManagerRejectMsg";$by="by Receivers Manager";}
-             if($_REQUEST["who_rejected"]=='hod') {$status =3 ;$who_rejected="HodRejected";$to=$requestor_details["email"]." , ".$resultarr["email"];$whos_reason="HodRejectMsg"; $by=" HOD";}
-           	$db1 = new cDB();
-			$sql = "UPDATE hz_transfer_requests SET ".$whos_reason." = '".mysql_real_escape_string($_REQUEST["txtreason"])."',Status=$status,".$who_rejected."=1 WHERE  requestID = ".$req_id;
-			if($db1->Query($sql))
-            {
-                $rejected=1;
-                if(sendMailToEmp($to,"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected ".$by,$_REQUEST["txtreason"]))//send mail to employee
-                {
-                   $rejected++; 
-                } 
-            }
-            else
-            {
-               $rejected=0;
-            }
-    
-    
-}
 }
 else
 {
@@ -388,28 +418,7 @@ else
      echo "<div style='text-align:center;min-height:300px;'><h2>Requestor/Receivers Data Not Found!</h2></div>";
    }
    
-   if($ask_reason==1)
-   {
-   ?>
-   	<form name="rejectform" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" >
-				<fieldset><legend>Reject Request</legend>
-
-				<div style="height:20px;margin:0 0 0 200px; "><img src="images/ajax-loader.gif" id="loader" style="display:none" /></div>
-                <div class="text-box-name">Reason for Rejection:</div>
-				<div class="textarea-box-field" >
-					<textarea name="txtreason" id="txtreason"  class="form-text" rows="4" ></textarea> 				
-				</div>
-				<div class="text-box-field"></div>
-                <div style="clear: both;">
-                <input type="hidden" name="request_id" value="<?php echo $_REQUEST["request_id"] ?>" />
-                <input type="hidden" name="who_rejected" value="<?php echo $who; ?>" />
-				<input type="submit" name="newTrequest" id="newTrequest" value="submit" style="width:80px; height:30px;margin-left:90px" /> 
-				</div>
-                </fieldset>
-   
-   </form>
-   <?php 
-   }
+ 
    ?>
 	</div>
 	</div>

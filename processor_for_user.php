@@ -61,14 +61,32 @@ function newTrequest() {
     $email       = $_REQUEST["email"];
     $manager     = $_REQUEST["manager"]  ;
     $requestor   = $_REQUEST["requestor"]  ;
-    
     $rmanagermail= $_REQUEST["rmanagermail"];
-    
+    $rlocation   = $_REQUEST["rlocation"];
+    $descr   = $_REQUEST["descr"];
 	
     if (isset($empid)  && isset($hardware) && isset($reason) && isset($serial) && isset($email) ) {
-		if (($empid != '')   && ($hardware != '') && ($reason != '') && ($serial != '') && ($email != '') ) {
-			$db1 = new cDB();
-			$sql = "INSERT INTO hz_transfer_requests(RequestorID,EmployeeID,HardwareID,TransferReason,ProductID,Email,ReceiversManagerMail,Status) 
+		if (($empid != '')   && ($hardware != '') && ($reason != '') && ($serial != '') && ($email != '') && ($rlocation != '')) {
+		  $db1 = new cDB();
+          //inserting receiver if not  exist in employee table.
+          $getSql = $db->Query("SELECT * FROM hz_employees WHERE empid='".$empid."' )");
+		  if (!$db->RowCount) 
+            {
+		      $sql = "INSERT INTO hz_employees(empid,empname,department,designation,email,location,empiddescr) 
+						VALUES('".$empid."','".$emp_name."','".$emp_dept."','".$emp_desi."','".$email."','".$rlocation."','".$descr."')";
+		      $responce =  $db1->Query($sql);
+            }
+            else
+            {
+                $sql= "UPDATE hz_employees SET empname='".$emp_name."', department='".$emp_dept."' , designation='".$emp_desi."', email = '".$email."'
+                , location= '".$rlocation."' , empiddescr='".$descr."' WHERE empid='".$empid."' ";
+                $responce = $db1->Query($sql);
+                
+            }
+            
+            if($responce)
+            {
+            $sql = "INSERT INTO hz_transfer_requests(RequestorID,EmployeeID,HardwareID,TransferReason,ProductID,Email,ReceiversManagerMail,Status) 
 						VALUES('".$requestor."','".$empid."','".$hardware."','".$reason."','".$serial."','".$email."','".$rmanagermail."',0)";
 			$db1->Query($sql);
             $new =$db1->LastInsertID;
@@ -88,7 +106,11 @@ function newTrequest() {
 					echo "103"; //status false. Error inserting into database.
 					die();
 				}
-			
+			}
+            else
+            {
+                echo "106" ;// error inserting/updating employee
+            }
 		} else {
 		echo "105"; // form field hasn't received by post
 		die();
@@ -150,6 +172,9 @@ function get_user_details() {
 				$resultarr['designation'] = $detail[0]['title'][0];
 				$resultarr['empmail'] = $detail[0]['mail'][0];
 				$resultarr['mgrmail'] = $detail['manager'][0]['mail'][0];
+                $resultarr['location'] = $detail[0]['physicaldeliveryofficename'][0];
+                $resultarr['descr'] = $detail[0]['description'][0];
+                
 
 				echo json_encode($resultarr);
 			} else {
