@@ -35,6 +35,8 @@ if (isset($_POST['txtsubmit'])) {
 					);
 				}
 			}
+		} else {
+        	$_SESSION['status'][] = 'No ldap configuration is defined';
 		}
 	} else {
 		$usertype = 1; //admin check
@@ -100,12 +102,12 @@ if (isset($_POST['txtsubmit'])) {
 				}
 				
 			} else {
-					$userdetail = array();
-					$_SESSION['username']   = $txtusername;
-					$_SESSION['isadmin']    = 0;
-					header("Location:user_home.php");
-				//$_SESSION['status'][] = 'Set ldap to true in application';
-				//header("Location:index.php");
+					//$userdetail = array();
+					//$_SESSION['username']   = $txtusername;
+					//$_SESSION['isadmin']    = 0;
+					//header("Location:user_home.php");
+				$_SESSION['status'][] = 'Set ldap to true in application';
+				header("Location:index.php");
 			}
 		} else {
 			$query = "SELECT * FROM hz_users WHERE username='".$txtusername."' AND password='".$txtpassword."' AND isadmin='1' AND ldapID=".$isadmin;
