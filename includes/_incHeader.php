@@ -36,9 +36,23 @@ include 'Application.php';
         </h1>
 		<hr class="noscreen" />
 		<!-- Show only if user is login-->
-		<?php if (isset($_SESSION['username'])) { ?>
-			<!-- Navbar start -->
+			<!-- Navbar end   -->
+         	<?php if (isset($_SESSION['adldapinfo'])) { ?>   
+            <!-- Navbar start -->
 			<div id="nav" class="box1">
+				<ul>
+   	                <li><a href="user_home.php">HOME</a></li>
+					<li><a href="request_asset.php">REQUEST ASSET</a></li>
+					<li><a href="transfer_request.php">TRANSFER ASSET</a></li>
+					<li><a href="asset_list.php">ASSET LIST</a></li>
+					<li><a href="logout.php">LOGOUT</a></li>
+				</ul>
+				<hr class="noscreen" />
+			</div>
+		<?php } else if (isset($_SESSION['username'])) { ?>
+			<!-- Navbar start -->
+			 <!-- not required -->
+			 <!-- <div id="nav" class="box1">
 				<ul>
 					<li><a href="home.php">HOME</a></li>
 					<li><a href="addEmployee.php">EMPLOYEE</a></li>
@@ -50,20 +64,7 @@ include 'Application.php';
 					<li><a href="logout.php">LOGOUT</a></li>
 				</ul>
 				<hr class="noscreen" />
-			</div>
-			<!-- Navbar end   -->
-         	<?php } elseif (isset($_SESSION['adldapinfo'])) { ?>   
-            <!-- Navbar start -->
-			<div id="nav" class="box1">
-				<ul>
-   	                <li><a href="user_home.php">HOME</a></li>
-					<li><a href="request_asset.php">REQUEST ASSET</a></li>
-					<li><a href="transfer_request.php">TRANSFER ASSET</a></li>
-					<li><a href="assert_list.php">ASSET LIST</a></li>
-					<li><a href="logout.php">LOGOUT</a></li>
-				</ul>
-				<hr class="noscreen" />
-			</div>
+			</div>-->
 			<!-- Navbar end   -->
 		<?php } else { ?>
 		<table border="0" width="98%">
