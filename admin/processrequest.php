@@ -542,24 +542,36 @@ function changePassword() {
 }*/
 function getempdetails() {
 	//username
-	global $adldap;
 	$id = $_REQUEST['reggetempid'];
 	if (!isset($_SESSION['username'])) {
 		echo "101"; // Session expires! Login again
 		die;
 	} else if (isset($id) && $id != '') {
-		$resultarr = array();
-		if ($detail = $adldap->user()->info($id, array("description","name","department","title"))) {
+		if (isset($_SESSION['ldapid'])) {
+			$option = getLdapOU($_SESSION['ldapid']);
+			$resultarr = array();
+			if (is_array($option) && !empty($option)) {
+				for($i=0;$i<count($option);$i++) {
+					$adldap = initializeLDAP($option[$i]);
+					$detail = $adldap->user()->info($id, array("description","name","department","title","mail","manager"));
+					if (!empty($detail)) {
+						break;
+					}
+				}
+			}
+		}
+		if (!empty($detail)) {
 				$resultarr['empiddesc']   = $detail[0]['description'][0];
 				$resultarr['empname'] = $detail[0]['name'][0];
-				$resultarr['unit'] = 'none';
+				$resultarr['unit'] = 'NONE';
 				$resultarr['department'] = $detail[0]['department'][0];
 				$resultarr['designation'] = $detail[0]['title'][0];
+				$resultarr['empmail'] = $detail[0]['mail'][0];
 				echo json_encode($resultarr);
 		} else {
 		    echo "102"; // id doesn't exist
 		    die;
-	    }
+		}
 	}
 }
 
