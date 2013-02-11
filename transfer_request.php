@@ -11,7 +11,7 @@ $username = ($_SESSION["adldapinfo"][0]["description"][0]) ? $_SESSION["adldapin
 $name = ($_SESSION["adldapinfo"][0]["cn"][0]) ? $_SESSION["adldapinfo"][0]["cn"][0] : "John Doe";
 $dept = ($_SESSION["adldapinfo"][0]["department"][0]) ? $_SESSION["adldapinfo"][0]["department"][0] : "CES-IT";
 $desi = ($_SESSION["adldapinfo"][0]["title"][0]) ? $_SESSION["adldapinfo"][0]["title"][0] : "CEO";
-$manager= ($_SESSION["managermail"][0]["mail"][0]) ? $_SESSION["managermail"][0]["mail"][0] : "him.developer@gmail.com";
+$manager= ($_SESSION["adldapinfo"]["managermail"][0]["mail"][0]) ? $_SESSION["adldapinfo"]["managermail"][0]["mail"][0] : "him.developer@gmail.com";
 
 ?>
 <script src="js/request.js"></script>
