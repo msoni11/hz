@@ -59,9 +59,16 @@ $(document).ready( function () {
         $adldap = initializeLDAP($options[$i]);
         $users = $adldap->user()->all();
         foreach ($users as $key=>$user) {
-        	$userinfo[] = $adldap->user()->info($user, array('mail','description','name','department','title'));
+        	$userinfo[] = $adldap->user()->info($user, array('mail','description','name','department','title','manager'));
+       		$managerinfo[] = $adldap->contact()->info($userinfo[0][0]['manager'][0],array('name','mail')); 
+        	$username[] = $user;
+        	$empinfo[] = array_merge($userinfo, $managerinfo, $username);
+        	unset($userinfo);
+        	unset($managerinfo);
+          	unset($username);
         }
 	}
+	
 ?>
 
 <!-- Content start -->
@@ -70,25 +77,30 @@ $(document).ready( function () {
 			<table cellpadding="0" cellspacing="0" border="0" class="display" id="ListEmployees">
 				<thead>
 					<tr>
+						<th >Emp Username</th>
 						<th >Employee ID</th>
 						<th >Employee Name</th>
 						<th >Department</th>
 						<th >Designation</th>
-						<th >mail</th>
+						<th >Email</th>
+						<th >Manager</th>
+						<th >Manager email</th>
 					</tr>
 				</thead>
 
 				<tbody>
 				<?php 
-				foreach ($userinfo as $userinf) {
+				foreach ($empinfo as $empinf) {
 					echo "<tr>";
-						echo "<td >".$userinf[0]['description'][0]."</td>";
-						echo "<td >".$userinf[0]['name'][0]."</td>";
-						echo "<td >".$userinf[0]['department'][0]."</td>";
-						echo "<td >".$userinf[0]['title'][0]."</td>";
-						echo "<td >".$userinf[0]['mail'][0]."</td>";
+						echo "<td >".$empinf[2]."</td>";
+						echo "<td >".$empinf[0][0]['description'][0]."</td>";
+						echo "<td >".$empinf[0][0]['name'][0]."</td>";
+						echo "<td >".$empinf[0][0]['department'][0]."</td>";
+						echo "<td >".$empinf[0][0]['title'][0]."</td>";
+						echo "<td >".$empinf[0][0]['mail'][0]."</td>";
+						echo "<td >".$empinf[1][0]['name'][0]."</td>";
+						echo "<td >".$empinf[1][0]['mail'][0]."</td>";
 					echo "</tr>";
-				
 				}
 				?>
 				</tbody>
