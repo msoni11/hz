@@ -45,11 +45,17 @@ include '../includes/Application.php';
 			<div id="nav" class="box1">
 				<ul>
 					<!--<li><a href="admin_home.php">HOME</a></li>-->
-					<li><a href="addUser.php">LOGIN USER</a></li>
-					<li><a href="addEmployee.php">NEW EMPLOYEE</a></li>
+					<!-- <li><a href="addUser.php">LOGIN USER</a></li>-->
+					<!-- <li><a href="addEmployee.php">NEW EMPLOYEE</a></li>-->
+					<li><a href="#">STOCK ENTRY</a>
+						<ul>
+							<li><a href="addStock.php">ASSET STOCK ENTRY</a></li>
+							<li><a href="addOtherStock.php">CONSUMABLE STOCK ENTRY</a></li>
+						</ul>
+					</li>
 					<li><a href="#">LIST</a>
 						<ul>
-							<li><a href="lists/listEmployee.php">Employee</a></li>
+							<li><a href="adlists/listEmployee.php">Employee</a></li>
 							<li><a href="lists/listAsset.php">IT Asset</a></li>
 							<li><a href="lists/listCriticalAsset.php">Critical Asset</a></li>
 							<li><a href="lists/listConsumable.php">Consumable Items</a></li>
@@ -78,15 +84,11 @@ include '../includes/Application.php';
 					</li>
 					<li><a href="userasset.php">IT ASSET</a></li>
 					<li><a href="otheruserasset.php">CONSUMABLE ITEMS</a></li>
-					<li><a href="addNetwork.php">NETWORK</a></li>
-					<li><a href="#">STOCK ENTRY</a>
-						<ul>
-							<li><a href="addStock.php">ASSET STOCK ENTRY</a></li>
-							<li><a href="addOtherStock.php">CONSUMABLE STOCK ENTRY</a></li>
-						</ul>
-					</li>
+					<!-- <li><a href="addNetwork.php">NETWORK</a></li>-->
 					<li><a href="criticalasset.php">CRITICAL ASSET</a></li>
 					<li><a href="importcsv.php">IMPORT</a></li>
+					<li><a href="scrap.php">SCRAP</a></li>
+					<li><a href="ip.php">IP</a></li>
 					<!--<li><a href="logout.php">LOGOUT</a></li>-->
 				</ul>
 				<hr class="noscreen" />
