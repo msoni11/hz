@@ -93,6 +93,33 @@ if (isset($_POST['txtsubmit'])) {
 				if (!empty($userdetail)) {
 					$userdetail['managermail'] = $adldap->contact()->info($userdetail[0]['manager'][0], array('mail'));
 					$_SESSION['adldapinfo'] = $userdetail;
+					$db1 = new cDB();
+					$db->Query("SELECT * FROM hz_employees WHERE empid='".$txtusername."'");
+					if ($db->RowCount) {
+						//update emp details
+						$updateinfo = $db1->Query("UPDATE hz_employees SET
+										empname = '".$userdetail[0]['name'][0]."',
+										department = '".$userdetail[0]['department'][0]."',
+										designation = '".$userdetail[0]['title'][0]."',
+										email = '".$userdetail[0]['mail'][0]."',
+										location = '".$userdetail[0]['physicaldeliveryofficename'][0]."',
+										empiddescr = '".$userdetail[0]['description'][0]."'
+									WHERE empid ='".$txtusername."'");
+						if (!$updateinfo) {
+							$_SESSION['status'][] = 'Some error while synchronising user data';
+							header("Location:index.php");
+							exit();
+						}
+					} else {
+						//Insert new entry
+						$db1->Query("INSERT INTO hz_employees(empid,empname,department,designation,email,location,empiddescr)
+									VALUES('".trim($txtusername)."','".$userdetail[0]['name'][0]."','".$userdetail[0]['department'][0]."','".$userdetail[0]['title'][0]."','".$userdetail[0]['mail'][0]."','".$userdetail[0]['physicaldeliveryofficename'][0]."','".$userdetail[0]['description'][0]."')");
+						if (!$db1->LastInsertID) {
+							$_SESSION['status'][] = 'Some error while synchronising user data';
+							header("Location:index.php");
+							exit();
+						}
+					}
 					header("Location:user_home.php");
 					exit();
 				} else {
