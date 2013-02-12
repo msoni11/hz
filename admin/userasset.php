@@ -8,4 +8,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 1) {
 
 include '../userassetForm.php';
 include 'includes/_incFooter.php';
+if (isset($_REQUEST['uname'])){
+	echo '<script type="text/javascript">hz_getEmployeeDetails();</script>';
+}
 ?>

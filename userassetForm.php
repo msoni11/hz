@@ -130,7 +130,7 @@ $("document").ready(function(){
 
 				<div class="text-box-name">Emp Username:</div>
 				<div class="text-box-field">
-					<input type="text" name="txtregempid" id="txtregempid" value="" class="form-text" size="30" maxlength="2048" />				
+					<input type="text" name="txtregempid" id="txtregempid" value="<?php echo isset($_REQUEST['uname'])?$_REQUEST['uname']:''; ?>" class="form-text" size="30" maxlength="2048" />				
 				</div>
 				<div class="text-box-field" ><button id='seeAllotedAsset' style='margin-left:110px;padding:3px;'>See Alloted Asset</button></div>
 

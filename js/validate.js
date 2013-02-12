@@ -1,3 +1,81 @@
+function hz_getEmployeeDetails() {
+	$("#loader").show();
+	var reggetempid = $("#txtregempid").val();
+	/*if (reggetempid == '') {
+		$("#loader").hide();
+        //alert('Enter Employee ID !');
+		$("#txtempname").val('');
+		$("#txtunit").val('-1');
+		$("#txtdepartment").val('-1');
+		$("#txtdesignation").val('');
+		$("#unittext").empty();
+		$("#departmenttext").empty();
+		$("#hideEmpDetails").hide();
+		return;
+	} else if (isNaN(reggetempid)) {
+		$("#loader").hide();
+        //alert('Employee ID should be Numeric !');
+		$("#txtempname").val('');
+		$("#txtunit").val('-1');
+		$("#txtdepartment").val('-1');
+		$("#txtdesignation").val('');
+		$("#unittext").empty();
+		$("#departmenttext").empty();
+		$("#hideEmpDetails").hide();
+		return;
+	} else if (reggetempid.length != '6') {
+		$("#loader").hide();
+        //alert('Employee Id should be of 6 digits only');
+		$("#txtempname").val('');
+		$("#txtunit").val('-1');
+		$("#txtdepartment").val('-1');
+		$("#txtdesignation").val('');
+		$("#unittext").empty();
+		$("#departmenttext").empty();
+		$("#hideEmpDetails").hide();
+		return;
+	}*/
+	$.ajax({
+	    url:"processrequest.php",
+	    type:"post",
+		    data:"functype=getempdetails&reggetempid=" + reggetempid,
+		success: function(result) {
+			if (result == 102) {
+				$("#loader").hide();
+				alert("User doesn't exist");
+				$("#txtempname").val('');
+				$("#txtunit").val('-1');
+				$("#txtdepartment").val('-1');
+				$("#txtdesignation").val('');
+				$("#unittext").empty();
+				$("#departmenttext").empty();
+				$("#hideEmpDetails").hide();
+			} else {
+			$("#loader").hide();
+			var arr = $.parseJSON(result);
+			$("#hideEmpDetails").show();
+			$("#txtempname").val(arr['empname'])
+							.attr('disabled', 'disabled');
+			$("#txtregempiddesc").val(arr['empiddesc'])
+								 .attr('disabled', 'disabled');
+			$("#txtdepartment").val(arr['department'])
+							   .attr('disabled', 'disabled');
+			$("#txtdesignation").val(arr['designation'])
+							    .attr('disabled', 'disabled');
+			$("#txtunit").val(arr['unit']);
+			if (($("#txtunit").val() == '-1') || ($("#txtunit").val() == null) || ($("#txtunit").val() == '')) {
+				$("#txtunit").val(0);
+				$("#unittext").empty().append('<input type="text" name="txtunittext" id="txtunittext" value="'+ arr['unit'] + '" class="form-text" size="30" maxlength="2048">');
+			}
+
+			/*if ($("#txtdepartment").val() == '-1' || ($("#txtdepartment").val() == null) || ($("#txtdepartment").val() == '')) {
+				$("#txtdepartment").val(0);
+				$("#departmenttext").empty().append('<input type="text" name="txtdepartmenttext" id="txtdepartmenttext" value="' + arr['department'] + '" class="form-text" size="30" maxlength="2048">');
+			}*/
+			}
+		}
+	});
+}
 $("document").ready(function(){
 // js for new employee form |start|
 function hasNumbers(t) {
@@ -468,84 +546,6 @@ $("#txtregreset").click(function(){
 		hz_getEmployeeDetails();
     });
 
-	function hz_getEmployeeDetails() {
-		$("#loader").show();
-		var reggetempid = $("#txtregempid").val();
-		/*if (reggetempid == '') {
-			$("#loader").hide();
-            //alert('Enter Employee ID !');
-			$("#txtempname").val('');
-			$("#txtunit").val('-1');
-			$("#txtdepartment").val('-1');
-			$("#txtdesignation").val('');
-			$("#unittext").empty();
-			$("#departmenttext").empty();
-			$("#hideEmpDetails").hide();
-			return;
-		} else if (isNaN(reggetempid)) {
-			$("#loader").hide();
-            //alert('Employee ID should be Numeric !');
-			$("#txtempname").val('');
-			$("#txtunit").val('-1');
-			$("#txtdepartment").val('-1');
-			$("#txtdesignation").val('');
-			$("#unittext").empty();
-			$("#departmenttext").empty();
-			$("#hideEmpDetails").hide();
-			return;
-		} else if (reggetempid.length != '6') {
-			$("#loader").hide();
-            //alert('Employee Id should be of 6 digits only');
-			$("#txtempname").val('');
-			$("#txtunit").val('-1');
-			$("#txtdepartment").val('-1');
-			$("#txtdesignation").val('');
-			$("#unittext").empty();
-			$("#departmenttext").empty();
-			$("#hideEmpDetails").hide();
-			return;
-		}*/
-		$.ajax({
-		    url:"processrequest.php",
-		    type:"post",
-			    data:"functype=getempdetails&reggetempid=" + reggetempid,
-			success: function(result) {
-				if (result == 102) {
-					$("#loader").hide();
-					alert("User doesn't exist");
-					$("#txtempname").val('');
-					$("#txtunit").val('-1');
-					$("#txtdepartment").val('-1');
-					$("#txtdesignation").val('');
-					$("#unittext").empty();
-					$("#departmenttext").empty();
-					$("#hideEmpDetails").hide();
-				} else {
-				$("#loader").hide();
-				var arr = $.parseJSON(result);
-				$("#hideEmpDetails").show();
-				$("#txtempname").val(arr['empname'])
-								.attr('disabled', 'disabled');
-				$("#txtregempiddesc").val(arr['empiddesc'])
-									 .attr('disabled', 'disabled');
-				$("#txtdepartment").val(arr['department'])
-								   .attr('disabled', 'disabled');
-				$("#txtdesignation").val(arr['designation'])
-								    .attr('disabled', 'disabled');
-				$("#txtunit").val(arr['unit']);
-				if (($("#txtunit").val() == '-1') || ($("#txtunit").val() == null) || ($("#txtunit").val() == '')) {
-					$("#txtunit").val(0);
-					$("#unittext").empty().append('<input type="text" name="txtunittext" id="txtunittext" value="'+ arr['unit'] + '" class="form-text" size="30" maxlength="2048">');
-				}
-
-				/*if ($("#txtdepartment").val() == '-1' || ($("#txtdepartment").val() == null) || ($("#txtdepartment").val() == '')) {
-					$("#txtdepartment").val(0);
-					$("#departmenttext").empty().append('<input type="text" name="txtdepartmenttext" id="txtdepartmenttext" value="' + arr['department'] + '" class="form-text" size="30" maxlength="2048">');
-				}*/
-				}
-			}
-		});
-	}
 
     $("#newregbtn").live('click', function(){
 	hz_newregistration();
