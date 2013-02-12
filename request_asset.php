@@ -7,7 +7,8 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 0) {
 }
 
 //accesing session data or dumping sample data
-$username = ($_SESSION["adldapinfo"][0]["description"][0]) ? $_SESSION["adldapinfo"][0]["description"][0] : "444444";
+$userid   = ($_SESSION["adldapinfo"][0]["description"][0]) ? $_SESSION["adldapinfo"][0]["description"][0] : "444444";
+$username = ($_SESSION['username']) ? $_SESSION['username'] : "hohn.doe";
 $name = ($_SESSION["adldapinfo"][0]["cn"][0]) ? $_SESSION["adldapinfo"][0]["cn"][0] : "John Doe";
 $dept = ($_SESSION["adldapinfo"][0]["department"][0]) ? $_SESSION["adldapinfo"][0]["department"][0] : "CES-IT";
 $desi = ($_SESSION["adldapinfo"][0]["title"][0]) ? $_SESSION["adldapinfo"][0]["title"][0] : "CEO";
@@ -28,12 +29,18 @@ $manager= ($_SESSION["adldapinfo"]["managermail"][0]["mail"][0]) ? $_SESSION["ad
 
 				<div style="height:20px;margin:0 0 0 200px; "><img src="images/ajax-loader.gif" id="loader" style="display:none" /></div>
 
-				<div class="text-box-name">Employee ID:</div>
+				<div class="text-box-name">Emp Username:</div>
 				<div class="text-box-field">
 					<input type="text" name="txtempid" id="txtempid" value="<?php echo $username; ?>" class="form-text" size="30" maxlength="2048" disabled="disabled" />
 				</div>
 				<div class="text-box-field"></div>
 				
+				<div class="text-box-name">Employee ID:</div>
+				<div class="text-box-field">
+					<input type="text" name="txtempid" id="txtempid" value="<?php echo $userid; ?>" class="form-text" size="30" maxlength="2048" disabled="disabled" />
+				</div>
+				<div class="text-box-field"></div>
+
 				<div class="text-box-name">Employee Name:</div>
 				<div class="text-box-field">
 					<input type="text" name="txtempname" id="txtempname" value="<?php echo $name; ?>" class="form-text" size="30" maxlength="2048" disabled="disabled" />				
