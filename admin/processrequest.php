@@ -732,7 +732,7 @@ function newstock() {
                    
                //building Assets code
                
-               $sql = "SELECT location FROM config_ldap WHERE id IN (SELECT ldapID FROM hz_users WHERE id =".$admin.")";
+               $sql = "SELECT location FROM config_ldap WHERE id=".$_SESSION['ldapid'];
                 $db->Query($sql);
 					if ($db->RowCount) {
 						if ($db->ReadRow()) {

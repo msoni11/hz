@@ -5,15 +5,16 @@ $("document").ready(function(){
              if (validateIPAddress($("#start").val()) && validateIPAddress($("#end").val())    ){
                        var startarr  = $("#start").val().split(".");
                        var endarr  = $("#end").val().split(".");
-                       if(startarr[0]== endarr[0] && startarr[1]== endarr[1] && startarr[2]== endarr[2])
+                       if(startarr[0]== endarr[0] && startarr[1]== endarr[1] && startarr[2]== endarr[2] && startarr[3]<= endarr[3] )
                        {
-                        alert("Good Range");
+                        
                         myData = "functype=addips&start="+$("#start").val()+"&end="+$("#end").val();
                             $.ajax({
                                 url:"processor_extra.php",
                                 type:"post",
                     	    data:myData,
                                 success: function(result) {
+                                   
                     				if (result == 0) {
                     					$("#loader").hide();
                     					alert('New Request has been added succesfully! Mail NOT Sent');
@@ -21,6 +22,12 @@ $("document").ready(function(){
                     				} else if (result == 404) {
                     					$("#loader").hide();
                     					alert('Function not found');
+                    				} else if (result == 106) {
+                    					$("#loader").hide();
+                    					alert('Invalid IP format');
+                    				} else if (result == 107) {
+                    					$("#loader").hide();
+                    					alert('Invalid IP Range');
                     				} else {
                     					$("#loader").hide();
                     					alert('Internal update error');
@@ -38,6 +45,53 @@ $("document").ready(function(){
                        alert("Bad IP Address!");
                      }
         });
+        
+        
+        //NEw location
+        $("#newlocation").live("click",function(){
+            
+            
+             if ($("#location").val()!=''){
+                       var location  = $("#location").val();
+                      
+                        myData = "functype=addlocation&location="+location;
+                            $.ajax({
+                                url:"processor_extra.php",
+                                type:"post",
+                    	    data:myData,
+                                success: function(result) {
+                                    
+                    				if (result == 0) {
+                    					$("#loader").hide();
+                    					alert('New Request has been added succesfully! Mail NOT Sent');
+                    					//window.location.reload();
+                    				} else if (result == 404) {
+                    					$("#loader").hide();
+                    					alert('Function not found');
+                    				} else if (result == 106) {
+                    					$("#loader").hide();
+                    					alert('Invalid IP format');
+                    				} else if (result == 107) {
+                    					$("#loader").hide();
+                    					alert('Invalid IP Range');
+                    				} else {
+                    					$("#loader").hide();
+                    					alert('Internal update error');
+                    				}
+                                }
+                            });
+                       
+                       
+                     }
+                     else{
+                        
+                       alert("Please enter location");
+                     }
+            
+        });
+        
+        
+        newlocation
         
         
         function validateIPAddress(inputString) {
