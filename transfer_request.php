@@ -113,6 +113,8 @@ $manager= ($_SESSION["adldapinfo"]["managermail"][0]["mail"][0]) ? $_SESSION["ad
                 
                 <input type="hidden" name="receiverManager"  id="receiverManager" value=""/>
                 <input type="hidden" name="receiverMail"  id="receiverMail" value=""/>
+                <input type="hidden" name="receiverLocation"  id="receiverLocation" value=""/>
+                <input type="hidden" name="descr"  id="descr" value=""/>
                 
                 <div style="clear: both;">
                 <input type="hidden" name="manager"  id="manager" value="<?php echo $manager; ?>"/>

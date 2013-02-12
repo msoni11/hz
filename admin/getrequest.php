@@ -262,9 +262,9 @@ function getassetcode()
         echo $getSql;
        if ($db->RowCount) {
 			while ($db->ReadRow()) {
-				$resultarr[$db->RowData['productID']] = strtoupper($db->RowData['asset_code']);
+				$code = strtoupper($db->RowData['asset_code']);
 			}
-			echo json_encode($resultarr);
+			echo $code;
 		} else {
 			echo "102"; // id doesn't exist
 		}
@@ -327,7 +327,7 @@ if (isset($_REQUEST['functype'])) {
 		getassetdetails();
 		break;
         
-         case 'getassetcode':
+        case 'getassetcode':
 		getassetcode();
 		break;
 

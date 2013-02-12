@@ -51,8 +51,9 @@ $("document").ready(function(){
         var hardware= $("#txthardware").val();
         var make = $("#txtmake").val();
         var model = $("#txtmodel").val();
+        
         $.ajax({
-            url:"getrequest.php",
+            url:"admin/getrequest.php",
             type:"post",
            data:"functype=getserials&hardware="+hardware+"&make="+make+"&model="+model,
            success: function(result)
@@ -67,11 +68,12 @@ $("document").ready(function(){
         });
         
          $.ajax({
-            url:"getrequest.php",
+            url:"admin/getrequest.php",
             type:"post",
            data:"functype=getmserials&hardware="+hardware+"&make="+make+"&model="+model,
            success: function(result)
            {
+            
             	var arr = $.parseJSON(result);
                 $("#txtcrtno").empty().append('<option value="-1" >----Select Serial Number----</option>');
                 $.each(arr,function(key,val){
@@ -87,7 +89,7 @@ $("document").ready(function(){
         
         
         $.ajax({
-            url:"getrequest.php",
+            url:"admin/getrequest.php",
             type:"post",
            data:"functype=getcpuconfig&serial_id="+cpu_serial,
            success: function(result)
@@ -101,18 +103,15 @@ $("document").ready(function(){
            
         });
         
-        console.log("functype=getassetcode&serial_id="+cpu_serial);
+        
         $.ajax({
-            url:"getrequest.php",
+            url:"admin/getrequest.php",
             type:"post",
            data:"functype=getassetcode&serial_id="+cpu_serial,
            success: function(result)
            {
-            	var arr = $.parseJSON(result);
-                $("#txtasset").empty();
-                $.each(arr,function(key,val){
-                    $("#txtasset").append(val);
-                });
+                $("#txtasset").empty().val(result);
+              
            }
           
            

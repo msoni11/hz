@@ -37,9 +37,23 @@ if(isset($_REQUEST["mapproved"]) && !empty($_REQUEST["request_id"]))
             }
             elseif($_REQUEST["mapproved"]==0)
             {
-                $ask_reason = 1;
-                $who = "MAN";
-    
+                $req_id = $_REQUEST["request_id"];
+            //if($_REQUEST["who_rejected"]=='HOD') {$status =1 ;$whoRejected="HodRejected"; }
+            $status =0 ; $whoRejected="ManagerRejected";
+           	$db1 = new cDB();
+			$sql = "UPDATE hz_asset_requests SET Status=$status ,".$whoRejected."= 1  WHERE  requestID = ".$req_id;
+    			if($db1->Query($sql))
+                {
+                    $rejected=1;
+                    if(sendMailToEmp($resultarr["email"],"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected"))//send mail to employee
+                    {
+                       $rejected++; 
+                    } 
+                }
+                else
+                {
+                   $rejected=0;
+                }
             }
         }
         else
@@ -83,9 +97,23 @@ if(isset($_REQUEST["happroved"]) && !empty($_REQUEST["request_id"]))
                 }
                 elseif($_REQUEST["happroved"]==0)
                 {
-                    $ask_reason = 1;
-                    $who = "HOD";
-                    
+                $req_id = $_REQUEST["request_id"];
+                $status =1 ;$whoRejected="HodRejected";
+           
+               	$db1 = new cDB();
+    			$sql = "UPDATE hz_asset_requests SET Status=$status ,".$whoRejected."= 1  WHERE  requestID = ".$req_id;
+        			if($db1->Query($sql))
+                    {
+                        $rejected=1;
+                        if(sendMailToEmp($resultarr["email"],"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected"))//send mail to employee
+                        {
+                           $rejected++; 
+                        } 
+                    }
+                    else
+                    {
+                       $rejected=0;
+                    }
                 }
         }
         else
@@ -101,29 +129,6 @@ if(isset($_REQUEST["happroved"]) && !empty($_REQUEST["request_id"]))
         }
 }
 
-
-if(isset($_REQUEST["txtreason"]))
-{
-            $req_id = $_REQUEST["request_id"];
-            if($_REQUEST["who_rejected"]=='HOD') {$status =1 ;$whoRejected="HodRejected"; }
-            if($_REQUEST["who_rejected"]=='MAN') {$status =0 ; $whoRejected="ManagerRejected";}
-           	$db1 = new cDB();
-			$sql = "UPDATE hz_asset_requests SET RejectionReason = '".mysql_real_escape_string($_REQUEST["txtreason"])."',Status=$status ,".$whoRejected."= 1  WHERE  requestID = ".$req_id;
-			if($db1->Query($sql))
-            {
-                $rejected=1;
-                if(sendMailToEmp($resultarr["email"],"Adminstrator@hz.com",$resultarr["HardwareID"],"rejected",$_REQUEST["txtreason"]))//send mail to employee
-                {
-                   $rejected++; 
-                } 
-            }
-            else
-            {
-               $rejected=0;
-            }
-    
-    
-}
 
 
 
@@ -204,29 +209,6 @@ if(isset($_REQUEST["txtreason"]))
         {
             echo "<div style='text-align:center;min-height:300px;'><h2>Request Has Been Already Processed As:<strong>REJECTED</strong></h2></div>"; 
         }
-   }
-   
-   if($ask_reason==1)
-   {
-   ?>
-   	<form name="rejectform" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" >
-				<fieldset><legend>Reject Request</legend>
-
-				<div style="height:20px;margin:0 0 0 200px; "><img src="images/ajax-loader.gif" id="loader" style="display:none" /></div>
-                <div class="text-box-name">Reason for Rejection:</div>
-				<div class="textarea-box-field" >
-					<textarea name="txtreason" id="txtreason"  class="form-text" rows="4" ></textarea> 				
-				</div>
-				<div class="text-box-field"></div>
-                <div style="clear: both;">
-                <input type="hidden" name="request_id" value="<?php echo $_REQUEST["request_id"] ?>" />
-                <input type="hidden" name="who_rejected" value="<?php echo $who; ?>" />
-				<input type="submit" name="newTrequest" id="newTrequest" value="submit" style="width:80px; height:30px;margin-left:90px" /> 
-				</div>
-                </fieldset>
-   
-   </form>
-   <?php 
    }
    ?>
 	</div>

@@ -124,8 +124,8 @@ $("document").ready(function(){
         var rdesi           = encodeURIComponent($("#requestordesi").val());
         var rmail           = encodeURIComponent($("#receiverMail").val());
         var rmanagermail           = encodeURIComponent($("#receiverManager").val());
-        
-     
+        var rlocation           = encodeURIComponent($("#receiverLocation").val());
+        var descr         = encodeURIComponent($("#descr").val());
 
 	if (empid == '') {
 			$("#loader").hide();
@@ -159,9 +159,9 @@ $("document").ready(function(){
         myData = "functype=newtrequest&empid=" + empid+ "&empname=" + empname + "&empdept=" + empdept + 
 				  "&empdesi=" + empdesi +"&hardware=" + hardware + "&reason=" + reason + "&serial=" + serial +
                   "&email="+email+"&manager="+$("#manager").val()+"&requestor="+rempid+"&requestorname="+rname+"&requestordept="+rdept+"&requestordesi="+rdesi
-                  +"&rmail="+rmail+"&rmanagermail="+rmanagermail;
+                  +"&rmail="+rmail+"&rmanagermail="+rmanagermail+"&rlocation="+rlocation+"&descr="+descr ;
 				  
-        console.log(myData);          
+                
          $.ajax({
             url:"processor_for_user.php",
             type:"post",
@@ -189,7 +189,11 @@ $("document").ready(function(){
 					$("#loader").hide();
 					alert('Error! Reload page or try again later');
 					window.location.reload();
-				} else if (result == 404) {
+				} else if(result == 106){
+					$("#loader").hide();
+					alert('Error! Inserting/Updating receiver employee');
+					window.location.reload();
+				}else if (result == 404) {
 					$("#loader").hide();
 					alert('Function not found');
 				} else {
@@ -297,6 +301,8 @@ $("document").ready(function(){
 						$("#receiverMail").val(arr['empmail']);
                         $("#txtempemailid").val(arr['empmail']);
 						$("#receiverManager").val(arr['mgrmail']);
+                        $("#receiverLocation").val(arr['location']);
+                        $("#descr").val(arr['descr']);
 					}
 				}
 			}

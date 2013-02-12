@@ -1,7 +1,7 @@
 <?php
 
 
-function sendMailToEmp($to,$from,$harware,$subject,$reason)
+function sendMailToEmp($to,$from,$harware,$subject)
 {
 
 if($harware==1){$harware_name="DESKTOP";}
