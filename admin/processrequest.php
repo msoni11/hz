@@ -1082,6 +1082,52 @@ function newcriticalregistration() {
 	}
 }
 
+//Function defintion : New IP form
+function newip() {
+    $ipname          = $_REQUEST['txtipname'];
+    $ipunit          = $_REQUEST['txtipunit'];
+    $ipaddr          = $_REQUEST['txtipaddress'];
+    $ipinternet      = $_REQUEST['txtipinternet'];
+    $iprepperson     = $_REQUEST['txtiprepperson'];
+    $ipreppersonmail = $_REQUEST['txtipreppersonmail'];
+    $ipmobile        = $_REQUEST['txtipmobile'];
+    $ipdurationfromd = $_REQUEST['txtipdurationfromday'];
+    $ipdurationfromm = $_REQUEST['txtipdurationfrommonth'];
+    $ipdurationfromy = $_REQUEST['txtipdurationfromyear'];
+    $ipdurationtod   = $_REQUEST['txtipdurationtoday'];
+    $ipdurationtom   = $_REQUEST['txtipdurationtomonth'];
+    $ipdurationtoy   = $_REQUEST['txtipdurationtoyear'];
+	
+	if (!isset($_SESSION['username'])) {
+		echo "101"; // Session expires! Login again
+		die();
+	} else if (isset($ipname) && isset($ipunit) && isset($ipaddr) && isset($iprepperson) && isset($ipreppersonmail) && isset($ipmobile) && isset($ipdurationfromd) && isset($ipdurationfromm) && isset($ipdurationfromy) && isset($ipdurationtod) && isset($ipdurationtom) && isset($ipdurationtoy)) {
+		if (($ipname != '') && ($ipunit != '') && ($ipaddr != '') && ($iprepperson != '') && ($ipreppersonmail != '') && ($ipmobile != '') && ($ipdurationfromd != '') && ($ipdurationfromm != '') && ($ipdurationfromy != '') && ($ipdurationtod != '') && ($ipdurationtom != '') && ($ipdurationtoy != '')) {
+			$db = new cDB();
+			$db1 = new cDB();
+			$durationfrom = mktime(0,0,0,(int)$ipdurationfromm,(int)$ipdurationfromd,(int)$ipdurationfromy);
+			$durationto = mktime(0,0,0,(int)$ipdurationtodm,(int)$ipdurationtod,(int)$ipdurationtoy);
+			
+			$sql = "INSERT INTO hz_ip(auditorName,unit,ip,internet,repPerson,repPersonEmail,mobile,durationFrom,durationTo) 
+					VALUES('".$ipname."','".$ipunit."','".$ipaddr."','".$ipinternet."','".$iprepperson."','".$ipreppersonmail."','".$ipmobile."','".$durationfrom."','".$durationto."')";
+			$db1->Query($sql);
+			if ($db1->LastInsertID) {
+				echo "0"; //status true.Show success message
+				die();
+			} else {
+				echo "103"; //status false. Error inserting into database.
+				die();
+			}
+		} else {
+		echo "105"; // form field hasn't received by post
+		die();
+		}
+	} else {
+		echo "104"; //Internal update error
+		die();
+	}
+}
+
 if (isset($_REQUEST['functype'])) {
 	switch ($_REQUEST['functype']) {
 		case 'newuser':
@@ -1122,6 +1168,10 @@ if (isset($_REQUEST['functype'])) {
 
 		case 'newotherstock':
 		newotherstock();
+		break;
+		
+		case 'newip':
+		newip();
 		break;
 
 		default:

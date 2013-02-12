@@ -3,6 +3,11 @@ $("document").ready(function(){
 function hasNumbers(t) {
 	return /\d/.test(t);
 }
+function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+    return pattern.test(emailAddress);
+};
+
 $("#txtunit").change(function(){
     if ($("#txtunit").val() == '0') {
         $("#unittext").empty().append('<input type="text" name="txtunittext" id="txtunittext" value="" class="form-text" size="30" maxlength="2048">');
@@ -1813,5 +1818,143 @@ $("#txtntwrkmake").change(function(){
 	
 
 // js for critical asset |end|
+
+// js for new IP auditor form |start|
+
+	$("#newipbtn").live('click', function(){
+		hz_newip();
+	});
+	function hz_newip() {
+		$("#loader").show();
+        var ipname         = encodeURIComponent($("#txtipname").val());
+        var ipunit         = encodeURIComponent($("#txtipunit").val());
+        var ipaddr         = encodeURIComponent($("#txtipaddress").val());
+        var iprepperson    = encodeURIComponent($("#txtiprepperson").val());
+        var ipreppersonmail= ($("#txtipreppersonmail").val());
+        var ipmobile       = encodeURIComponent($("#txtipmobile").val());
+        var ipdurationfromd = encodeURIComponent($("#txtipdurationfromday").val());
+        var ipdurationfromm = encodeURIComponent($("#txtipdurationfrommonth").val());
+        var ipdurationfromy = encodeURIComponent($("#txtipdurationfromyear").val());
+        var ipdurationtod   = encodeURIComponent($("#txtipdurationtoday").val());
+        var ipdurationtom   = encodeURIComponent($("#txtipdurationtomonth").val());
+        var ipdurationtoy   = encodeURIComponent($("#txtipdurationtoyear").val());
+        console.log( $('#ipform').serialize());
+        
+        if (ipname == '') {
+			$("#loader").hide();
+            alert('Enter Name please!');
+			return;
+        } else if (ipunit == '-1') {
+			$("#loader").hide();
+            alert('Select unit');
+			return;
+        }/* else if (unit == '0' && unittext == '') {
+			$("#loader").hide();
+            alert('Enter unit please!');
+			return;
+        }*/ else if (ipaddr == '') {
+			$("#loader").hide();
+            alert('Enter IP Address !');
+			return;
+		} else if (ipaddr != '' && !fnValidateIPAddress(ipaddr)) {
+			$("#loader").hide();
+            alert('Enter Correct IP Address !');
+			return;
+		} else if (iprepperson == '') {
+			$("#loader").hide();
+            alert('Enter Reporting person');
+			return;
+	    } else if (ipreppersonmail == '') {
+			$("#loader").hide();
+            alert('Enter Reporting person\'s email');
+			return;
+	    } else if (!isValidEmailAddress(ipreppersonmail)) {
+			$("#loader").hide();
+            alert('Enter Valid email address');
+			return;
+	    } else if (ipmobile == '') {
+			$("#loader").hide();
+            alert('Enter Mobile Number');
+			return;
+	    } else if (isNaN(ipmobile)) {
+			$("#loader").hide();
+            alert('Mobile Number should be numeric');
+			return;
+	    } else if (ipdurationfromd == '-1' ){
+			$("#loader").hide();
+			alert('Select duration from date!');
+			return;
+		} else if (ipdurationfromm == '-1' ){
+			$("#loader").hide();
+			alert('Select duration from month!');
+			return;
+		} else if (ipdurationfromy == '-1' ){
+			$("#loader").hide();
+			alert('Select duration from year!');
+			return;
+		} else if (ipdurationtod == '-1' ){
+			$("#loader").hide();
+			alert('Select duration to day!');
+			return;
+		} else if (ipdurationtom == '-1' ){
+			$("#loader").hide();
+			alert('Select duration to month!');
+			return;
+		} else if (ipdurationtoy == '-1' ){
+			$("#loader").hide();
+			alert('Select duration to year!');
+			return;
+		}
+	    if (ipdurationtoy >= ipdurationfromy) {
+	    	if (ipdurationtom >= ipdurationfromm) {
+	    		if (ipdurationtod < ipdurationfromd) {
+					$("#loader").hide();
+					alert('Duration to must be greater than duration from');
+					return;
+	    		}
+	    	} else {
+				$("#loader").hide();
+				alert('Duration to must be greater than duration from');
+				return;
+	    	}
+	    } else {
+			$("#loader").hide();
+			alert('Duration to must be greater than duration from');
+			return;
+	    }
+
+        formdata = $('#ipform').serialize();
+        $.ajax({
+            url:"processrequest.php",
+            type:"post",
+		    data:formdata+"&functype=newip",
+            success: function(result) {
+				if (result == 0) {
+					$("#loader").hide();
+					alert('IP has been succesfully added!');
+					window.location.reload();
+				} else if (result == 101){
+					$("#loader").hide();
+					alert('Session expired! Login again');
+					window.location = 'logout.php';
+				} else if (result == 103){
+					$("#loader").hide();
+					alert('Error inserting new IP! Try again later');
+				} else if(result == 105){
+					$("#loader").hide();s
+					alert('Error! Reload page or try again later');
+					window.location.reload();
+				} else if (result == 404) {
+					$("#loader").hide();
+					alert('Function not found');
+				} else {
+					$("#loader").hide();
+					alert('Internal update error');
+				}
+            }
+        });
+    }
+
+// js for new IP auditor form |end|
 
 });
