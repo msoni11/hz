@@ -53,7 +53,7 @@ $("document").ready(function(){
         var model = $("#txtmodel").val();
         
         $.ajax({
-            url:"admin/getrequest.php",
+            url:"getrequest.php",
             type:"post",
            data:"functype=getserials&hardware="+hardware+"&make="+make+"&model="+model,
            success: function(result)
@@ -68,7 +68,7 @@ $("document").ready(function(){
         });
         
          $.ajax({
-            url:"admin/getrequest.php",
+            url:"getrequest.php",
             type:"post",
            data:"functype=getmserials&hardware="+hardware+"&make="+make+"&model="+model,
            success: function(result)
@@ -89,7 +89,7 @@ $("document").ready(function(){
         
         
         $.ajax({
-            url:"admin/getrequest.php",
+            url:"getrequest.php",
             type:"post",
            data:"functype=getcpuconfig&serial_id="+cpu_serial,
            success: function(result)
@@ -105,7 +105,7 @@ $("document").ready(function(){
         
         
         $.ajax({
-            url:"admin/getrequest.php",
+            url:"getrequest.php",
             type:"post",
            data:"functype=getassetcode&serial_id="+cpu_serial,
            success: function(result)
@@ -315,18 +315,32 @@ $("document").ready(function(){
 					</select> -->
 				</div>
 				<div class="text-box-field"><div id="assettext"></div></div>
-
+                
 				<div class="text-box-name">IP Address:</div>
+                <?php 
+				$db->Query("SELECT * FROM hz_ip_address WHERE IpAddressID NOT IN ( SELECT ipaddr FROM hz_registration WHERE activestatus ='A' )");
+				?>
 				<div class="text-box-field">
-					<input type="text" name="ipaddress" id="ipaddress" value="" class="form-text" size="30" maxlength="2048" />				
+					<select name="ipaddress" id="ipaddress"  class="form-text">	
+                    <option value='-1'>----Select IP Address----</option>
+						
+						<?php 
+						if ($db->RowCount) { 
+							while ($db->ReadRow()) {
+								echo '<option value="'.($db->RowData['IpAddressID']).'">'.$db->RowData['Address'].'</option>';
+							} 
+						}
+						?>
+						
+					</select>			
 				</div>
 				<div class="text-box-field"></div>
 
-				<div class="text-box-name">MS Office:</div>
+				<!--<div class="text-box-name">MS Office:</div>
 				<div class="text-box-field">
 					<select name="txtoffice" id = "txtoffice"  class="form-text" style="width:91%" >
-						<option value="-1">---Select---</option>
-						<?php
+						<option value="-1">---Select---</option> 
+					<!--	<?php
 						foreach ($msoffice_array as $mso){
 							echo '<option value="'.$mso.'">'.$mso.'</option>';
 						}
@@ -334,12 +348,12 @@ $("document").ready(function(){
 					</select>
 				</div>
 				<div class="text-box-field"></div>
-
+                
 				<div class="text-box-name">Any License Soft:</div>
 				<div class="text-box-field">
 					<input type="text" name="txtlicense" id="txtlicense" value="" class="form-text" size="30" maxlength="2048" />				
 				</div>
-				<div class="text-box-field"></div>
+				<div class="text-box-field"></div>-->
 
 				<div class="text-box-name">Internet:</div>
 				<div class="text-box-field">
@@ -432,9 +446,23 @@ $("document").ready(function(){
 				</div>
 				<div class="text-box-field"></div>
 
-				<div class="text-box-name">Other IT Asset:</div>
+				<div class="text-box-name">Current Location:</div>
 				<div class="text-box-field">
-					<input type="text" name="txtotheritasset" id="txtotheritasset" value="" class="form-text" size="30" maxlength="2048" />				
+                 <?php 
+				$db->Query("SELECT * FROM hz_locations");
+				?>
+					<select name="txtlocation" id="txtlocation"  class="form-text" >	
+                    <option value='-1'>----Select Location----</option>
+						
+						<?php 
+						if ($db->RowCount) { 
+							while ($db->ReadRow()) {
+								echo '<option value="'.($db->RowData['LocationID']).'">'.$db->RowData['LocationName'].'</option>';
+							} 
+						}
+						?>
+						
+					</select>				
 				</div>
 				<div class="text-box-field"></div>
 
