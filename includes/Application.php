@@ -23,7 +23,7 @@ require '_incClass_mySQL.php';
 require '_incGlobalFunctions.php';
 //Include active directory class library
 require_once('adLdap/adLDAP.php');
-$ldap = false;
+$ldap = true;
 if ($ldap) {
 	$CFG = new stdClass();
 }

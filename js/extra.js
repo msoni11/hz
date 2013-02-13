@@ -17,8 +17,8 @@ $("document").ready(function(){
                                    
                     				if (result == 0) {
                     					$("#loader").hide();
-                    					alert('New Request has been added succesfully! Mail NOT Sent');
-                    					//window.location.reload();
+                    					alert('New IP series has been added!');
+                    					window.location.reload();
                     				} else if (result == 404) {
                     					$("#loader").hide();
                     					alert('Function not found');
@@ -63,7 +63,7 @@ $("document").ready(function(){
                                     
                     				if (result == 0) {
                     					$("#loader").hide();
-                    					alert('New Request has been added succesfully! Mail NOT Sent');
+                    					alert('New Location has been added succesfully!');
                     					//window.location.reload();
                     				} else if (result == 404) {
                     					$("#loader").hide();
