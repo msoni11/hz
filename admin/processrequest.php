@@ -87,11 +87,14 @@ function newuser() {
 
 // function definition : New registration entry
 function newregistration() {
-	$regempid = $_REQUEST['regempiddesc'];
+	$regempid       = $_REQUEST['regempid'];
+	$regempiddescr  = $_REQUEST['txtregempiddesc'];
 	$regempname     = strtoupper($_REQUEST['regempname']);
 	$regunitname    = strtoupper($_REQUEST['regunit']);
 	$regdeptname    = strtoupper($_REQUEST['regdepartment']);
 	$regdesignation = strtoupper($_REQUEST['regdesignation']);
+	$regempmail     = strtoupper($_REQUEST['txtemail']);
+	$regemplocation = strtoupper($_REQUEST['txtlocation']);
 	$reghardware = strtoupper($_REQUEST['reghardware']); //int
 	$regcartage = strtoupper($_REQUEST['regcartage']);
 	$regprintertype = strtoupper($_REQUEST['regprintertype']); //int
@@ -145,7 +148,7 @@ function newregistration() {
 			if ($regasset == 'OTHER') {
 				$regasset = $regassettext;
 			} else {
-				$regasset = $regasset."/".$regassettext;
+				$regasset = $regasset;
 			}
 			if ($regamc == 'AMC') {
 				if ($regvendor != '') {
@@ -241,7 +244,7 @@ function newregistration() {
 						$dbTotalAvail->Query($totalAvail);
 						if ($dbTotalAvail->ReadRow()) {
 							if ( $stockquantity > $dbTotalAvail->RowData['total']) {
-								$sqlselect = "SELECT * FROM hz_employees WHERE empid=".$regempid;
+								$sqlselect = "SELECT * FROM hz_employees WHERE empid='".$regempid."'";
 								$db->Query($sqlselect);
 								if ($db->RowCount) {
 									if ($db->ReadRow()) {
@@ -250,7 +253,10 @@ function newregistration() {
 														empname='".$regempname."',
 														unit='".$regunitname."',
 														department='".$regdeptname."',
-														designation='".$regdesignation."' WHERE empid=".$regempid;
+														designation='".$regdesignation."',
+														email ='".$regempmail."',
+														location ='".$regemplocation."',
+														empiddescr ='".$regempiddescr."' WHERE empid='".$regempid."'";
 										$updateEmp = $db2->Query($sql);
 										if (!$updateEmp) {
 											echo "106"; //update error.
@@ -266,8 +272,8 @@ function newregistration() {
 									}
 								} else {
 									//Insert new entry in employee table
-									$sql = "INSERT INTO hz_employees(empid, empname, unit, department, designation, mail, location) 
-											VALUES('".$regempid."','".$regempname."','".$regunitname."','".$regdeptname."','".$regdesignation."','','')";
+									$sql = "INSERT INTO hz_employees(empid, empname, unit, department, designation, email, location,empiddescr) 
+											VALUES('".$regempid."','".$regempname."','".$regunitname."','".$regdeptname."','".$regdesignation."','".$regempmail."','".$regemplocation."','".$regempiddescr."')";
 									$insertEmp = $db2->Query($sql);
 									if (!$db2->LastInsertID) {
 										echo "103"; //User insertion error
@@ -275,11 +281,11 @@ function newregistration() {
 									}
 								}
 								$sql = "INSERT INTO hz_registration(empid, hardware, cartage, printertype, make, model, cpuno,
-																	monitortype, monitorno, sysconfig, assetcode, ipaddr, officever, licensesoft,
-																	internet, internettype, warnorvendor, date, otheritasset, status
+																	monitortype, monitorno, sysconfig, assetcode, ipaddr, 
+																	internet, internettype, warnorvendor, date, status
 																	) 
 										VALUES('".$regempid."','".$reghardware."','".$regcartage."','".$regprintertype."','".$regmake."','".$regmodel."','".$regcpuno."','".$regmonitor."','".$regcrtno."','".$regconfig."',
-												'".$regasset."','".$regip."','".$regoffice."','".$reglicense."','".$reginternet."','".$regamc."','".$warnvendor."','".$date."','".$regotherasset."','".$regstatus."')";
+												'".$regasset."','".$regip."','".$reginternet."','".$regamc."','".$warnvendor."','".$date."','".$regstatus."')";
 							
 								$db1->Query($sql);
 								if ($db1->LastInsertID) {
@@ -553,7 +559,7 @@ function getempdetails() {
 			if (is_array($option) && !empty($option)) {
 				for($i=0;$i<count($option);$i++) {
 					$adldap = initializeLDAP($option[$i]);
-					$detail = $adldap->user()->info($id, array("description","name","department","title","mail","manager"));
+					$detail = $adldap->user()->info($id, array("description","name","department","title","cn","sn","company","physicaldeliveryofficename","mail","manager"));
 					if (!empty($detail)) {
 						break;
 					}
@@ -567,6 +573,7 @@ function getempdetails() {
 				$resultarr['department'] = $detail[0]['department'][0];
 				$resultarr['designation'] = $detail[0]['title'][0];
 				$resultarr['empmail'] = $detail[0]['mail'][0];
+				$resultarr['emplocation'] = $detail[0]['physicaldeliveryofficename'][0];
 				echo json_encode($resultarr);
 		} else {
 		    echo "102"; // id doesn't exist

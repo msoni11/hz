@@ -173,7 +173,10 @@ $("document").ready(function(){
 					<input type="text" name="txtdesignation" id="txtdesignation" value="" class="form-text" size="30" maxlength="2048" />				
 				</div>
 				<div class="text-box-field"></div>
-
+<!-- Hidden Fields-->
+				<input type="hidden" name="txtemail" id="txtemail" value="" class="form-text" size="30" maxlength="2048" />				
+				<input type="hidden" name="txtlocation" id="txtemail" value="" class="form-text" size="30" maxlength="2048" />				
+<!-- Hidden Fields-->
 				<div class="text-box-name">Unit:</div>
 				<?php 
 				$db->Query("SELECT * FROM hz_units");

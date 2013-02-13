@@ -54,15 +54,17 @@ function hz_getEmployeeDetails() {
 			$("#loader").hide();
 			var arr = $.parseJSON(result);
 			$("#hideEmpDetails").show();
-			$("#txtempname").val(arr['empname'])
-							.attr('disabled', 'disabled');
 			$("#txtregempiddesc").val(arr['empiddesc'])
+							.attr('disabled', 'disabled');
+			$("#txtempname").val(arr['empname'])
 								 .attr('disabled', 'disabled');
 			$("#txtdepartment").val(arr['department'])
 							   .attr('disabled', 'disabled');
 			$("#txtdesignation").val(arr['designation'])
 							    .attr('disabled', 'disabled');
 			$("#txtunit").val(arr['unit']);
+			$("#txtemail").val(arr['empmail']);
+			$("#txtlocation").val(arr['emplocation']);
 			if (($("#txtunit").val() == '-1') || ($("#txtunit").val() == null) || ($("#txtunit").val() == '')) {
 				$("#txtunit").val(0);
 				$("#unittext").empty().append('<input type="text" name="txtunittext" id="txtunittext" value="'+ arr['unit'] + '" class="form-text" size="30" maxlength="2048">');
