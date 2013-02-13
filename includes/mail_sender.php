@@ -339,8 +339,8 @@ function sendMailToHOD2($from,$subject,$request_info,$requestor_details)//mail s
 
 $url = explode("/",$_SERVER["SCRIPT_NAME"]);
 
-$approve_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/response.php?happroved=1&request_id=".$request_info["RequestID"];
-$reject_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/response.php?happroved=0&request_id=".$request_info["RequestID"];
+$approve_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/tresponse.php?happroved=1&request_id=".$request_info["RequestID"];
+$reject_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/tresponse.php?happroved=0&request_id=".$request_info["RequestID"];
 if($request_info["HaveAssets"]==1) $have = "YES" ; else $have ="NO";
 if($request_info["Executive"]==1) $type = "EXECUTIVE" ; else $type ="NON-EXECUTIVE";
 

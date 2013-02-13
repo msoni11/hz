@@ -67,9 +67,10 @@ function newTrequest() {
 	
     if (isset($empid)  && isset($hardware) && isset($reason) && isset($serial) && isset($email) ) {
 		if (($empid != '')   && ($hardware != '') && ($reason != '') && ($serial != '') && ($email != '') && ($rlocation != '')) {
+		  $db = new cDB();
 		  $db1 = new cDB();
           //inserting receiver if not  exist in employee table.
-          $getSql = $db->Query("SELECT * FROM hz_employees WHERE empid='".$empid."' )");
+          $getSql = $db->Query("SELECT * FROM hz_employees WHERE empid='".$empid."'");
 		  if (!$db->RowCount) 
             {
 		      $sql = "INSERT INTO hz_employees(empid,empname,department,designation,email,location,empiddescr) 
@@ -158,7 +159,7 @@ function get_user_details() {
 			if (is_array($option) && !empty($option)) {
 				for($i=0;$i<count($option);$i++) {
 					$adldap = initializeLDAP($option[$i]);
-					$detail = $adldap->user()->info($id, array("description","name","department","title","mail","manager"));
+					$detail = $adldap->user()->info($id, array("description","physicaldeliveryofficename","name","department","title","mail","manager"));
 					if (!empty($detail)) {
 						break;
 					}
