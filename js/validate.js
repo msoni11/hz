@@ -555,10 +555,13 @@ $("#txtregreset").click(function(){
 	function hz_newregistration() {
 		$("#loader").show();
 		var regempid       = $.trim($("#txtregempid").val());
+		var regempiddesc   = $.trim($("#txtregempiddesc").val());
 		var regempname     = $("#txtempname").val();
 		var regunit        = encodeURIComponent($("#txtunit").val());
 		var regdepartment  = encodeURIComponent($("#txtdepartment").val());
 		var regdesignation = $("#txtdesignation").val();
+		var regempmail     = encodeURIComponent($("#txtemail").val());
+		var regemplocation = encodeURIComponent($("#txtlocation").val());
 		var regunittext    = encodeURIComponent($("#txtunittext").val());
 		var regdepartmenttext = encodeURIComponent($("#txtdepartmenttext").val());
 		var reghardware    = encodeURIComponent($("#txthardware").val());
@@ -797,8 +800,8 @@ $("#txtregreset").click(function(){
 	
 	if (regamc == 'AMC') {
 		var allData = "functype=newregistration&regempid=" + regempid + "&regempname=" + regempname +
-				"&regunit=" + regunit + "&regdepartment=" + regdepartment + "&regdesignation=" + regdesignation + 
-				"&reghardware=" + reghardware + "&regcartage=" + regcartage + "&regprintertype=" + regprintertype + 
+				"&regunit=" + regunit + "&regdepartment=" + regdepartment + "&regdesignation=" + regdesignation + "&txtemail="+regempmail + "&txtlocation="+regemplocation+
+				"&txtregempiddesc="+ regempiddesc + "&reghardware=" + reghardware + "&regcartage=" + regcartage + "&regprintertype=" + regprintertype + 
 				"&regmake=" + regmake + "&regmodel=" + regmodel + "&regcpuno=" + regcpuno + 
 				"&regmonitor=" + regmonitor + "&regcrtno=" + regcrtno + "&regconfig=" + regconfig + 
 				"&regasset=" + regasset + "&regassettext=" + regassettext + "&regip=" + regip+ "&regoffice=" + regoffice+ 
@@ -807,8 +810,8 @@ $("#txtregreset").click(function(){
 				"&regstatus=" + regstatus;
 	} else 	if (regamc == 'WAR') {
 		var allData = "functype=newregistration&regempid=" + regempid + "&regempname=" + regempname +
-				"&regunit=" + regunit + "&regdepartment=" + regdepartment + "&regdesignation=" + regdesignation + 
-				"&reghardware=" + reghardware + "&regcartage=" + regcartage + "&regprintertype=" + regprintertype + 
+				"&regunit=" + regunit + "&regdepartment=" + regdepartment + "&regdesignation=" + regdesignation + "&txtemail="+regempmail + "&txtlocation="+regemplocation+
+				"&txtregempiddesc="+ regempiddesc +"&reghardware=" + reghardware + "&regcartage=" + regcartage + "&regprintertype=" + regprintertype + 
 				"&regmake=" + regmake + "&regmodel=" + regmodel + "&regcpuno=" + regcpuno + 
 				"&regmonitor=" + regmonitor + "&regcrtno=" + regcrtno + "&regconfig=" + regconfig + 
 				"&regasset=" + regasset + "&regassettext=" + regassettext + "&regip=" + regip+ "&regoffice=" + regoffice+ 
@@ -824,7 +827,7 @@ $("#txtregreset").click(function(){
             success: function(result) {
                 if (result == 0) {
 					$("#loader").hide();
-					alert('Registration has been done succesfully');
+					alert('Registration has been done succesfully! Mail sent to employee');
 						/*$("#txtregempid").val('');
 						$("#txtempname").val('');
 						$("#txtunit").val('-1');
@@ -857,6 +860,10 @@ $("#txtregreset").click(function(){
 						$("#txtotheritasset").val('');
 						$("#txtregstatus").val('');*/
 						window.location.reload();
+				} else if (result == 1) {
+					$("#loader").hide();
+					alert('Registration has been done succesfully! Mail sent to employee');
+					window.location.reload();
 				} else if (result == 103) {
 					$("#loader").hide();
 					alert('Error inserting user entry!');
@@ -1933,7 +1940,11 @@ $("#txtntwrkmake").change(function(){
             success: function(result) {
 				if (result == 0) {
 					$("#loader").hide();
-					alert('IP has been succesfully added!');
+					alert('IP has been succesfully added! Mail Sent');
+					window.location.reload();
+				} else if (result == 1) {
+					$("#loader").hide();
+					alert('IP has been succesfully added! Mail Sent');
 					window.location.reload();
 				} else if (result == 101){
 					$("#loader").hide();

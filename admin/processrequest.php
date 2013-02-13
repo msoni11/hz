@@ -89,12 +89,12 @@ function newuser() {
 function newregistration() {
 	$regempid       = $_REQUEST['regempid'];
 	$regempiddescr  = $_REQUEST['txtregempiddesc'];
-	$regempname     = strtoupper($_REQUEST['regempname']);
-	$regunitname    = strtoupper($_REQUEST['regunit']);
-	$regdeptname    = strtoupper($_REQUEST['regdepartment']);
-	$regdesignation = strtoupper($_REQUEST['regdesignation']);
-	$regempmail     = strtoupper($_REQUEST['txtemail']);
-	$regemplocation = strtoupper($_REQUEST['txtlocation']);
+	$regempname     = $_REQUEST['regempname'];
+	$regunitname    = $_REQUEST['regunit'];
+	$regdeptname    = $_REQUEST['regdepartment'];
+	$regdesignation = $_REQUEST['regdesignation'];
+	$regempmail     = $_REQUEST['txtemail'];
+	$regemplocation = $_REQUEST['txtlocation'];
 	$reghardware = strtoupper($_REQUEST['reghardware']); //int
 	$regcartage = strtoupper($_REQUEST['regcartage']);
 	$regprintertype = strtoupper($_REQUEST['regprintertype']); //int
@@ -289,8 +289,14 @@ function newregistration() {
 							
 								$db1->Query($sql);
 								if ($db1->LastInsertID) {
-									echo "0"; //status true.Show success message
-									die();
+									$mailStatus = sendRegistrationMail($regempmail,'New Asset Information');
+									if ($mailStatus) {
+										echo "0"; //status true.mail sent
+										die();
+									} else {
+										echo "1"; //status true.mail not sent
+										die();
+									}
 								} else {
 									echo "103"; //status false. Error inserting into database.
 									die();
@@ -1119,8 +1125,14 @@ function newip() {
 					VALUES('".$ipname."','".$ipunit."','".$ipaddr."','".$ipinternet."','".$iprepperson."','".$ipreppersonmail."','".$ipmobile."','".$durationfrom."','".$durationto."')";
 			$db1->Query($sql);
 			if ($db1->LastInsertID) {
-				echo "0"; //status true.Show success message
-				die();
+				$mailStatus = sendAuditorMail($ipreppersonmail,'Auditor\'s IP Allotment');
+				if ($mailStatus) {
+					echo "0"; //status true.Mail sent
+					die();
+				} else {
+					echo "1"; //status true.Mail not sent
+					die();
+				}
 			} else {
 				echo "103"; //status false. Error inserting into database.
 				die();
@@ -1133,6 +1145,151 @@ function newip() {
 		echo "104"; //Internal update error
 		die();
 	}
+}
+
+
+function sendAuditorMail($to,$subject)
+{
+	$dateFrom = $_REQUEST["txtipdurationfromday"].'/'.$_REQUEST["txtipdurationfrommonth"].'/'.$_REQUEST["txtipdurationfromyear"];
+	$dateTo = $_REQUEST["txtipdurationtoday"].'/'.$_REQUEST["txtipdurationtomonth"].'/'.$_REQUEST["txtipdurationtoyear"];
+	
+	$content = 'A new IP <b>'. $_REQUEST['txtipaddress'] . '</b> ';
+	$content .= $_REQUEST["txtipinternet"] == 'YES' ? 'with' : 'withoout';
+	$content .= ' internet has been alloted to the <b>'. $_REQUEST['txtipname']. '</b>';
+	$content .= ' from '. $dateFrom . ' to '. $dateTo;
+	$db = new cDB();
+	$db->Query('SELECT name FROM hz_units WHERE id='. $_REQUEST['txtipunit']);
+	if ($db->RowCount) {
+		if ($db->ReadRow()) {
+			$content .= ' in <b>'.$db->RowData['name'].'</b> unit';
+		}
+	}
+	$body ='<!DOCTYPE HTML>
+	<head>
+		<meta http-equiv="content-type" content="text/html" />
+		<meta name="author" content="" />
+	
+		<title>New Asset Request</title>
+	</head>
+	
+	<body>
+	<table>
+	<tr><td colspan="2">Dear Sir,</td></tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr><td colspan="2">'.$content.'</td></tr>
+	</table>
+	<br /><br /><br />
+	<p>Regards,</p>
+	<p>Inventory System</p>
+	
+	</body>
+	</html>';
+	$body             = eregi_replace("[\]",'',$body);
+	
+	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	$headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
+	$mail = mail($to,$subject,$body,$headers);
+	
+	if(!$mail) {
+	    return 0;
+	  //echo "Mailer Error: " . $mail->ErrorInfo;
+	} else {
+	  //echo "Message sent!";
+	  
+	  return 1;
+	}
+}
+
+function sendRegistrationMail($to,$subject)
+{
+
+	$reghardware = strtoupper($_REQUEST['reghardware']); //int
+	$regprintertype = strtoupper($_REQUEST['regprintertype']); //int
+	$regmake = strtoupper($_REQUEST['regmake']); //int
+	$regmodel = strtoupper($_REQUEST['regmodel']); //int
+	$regcpuno = strtoupper($_REQUEST['regcpuno']);
+	$regmonitor = strtoupper($_REQUEST['regmonitor']);
+	$regcrtno = strtoupper($_REQUEST['regcrtno']);
+	
+	$db= new cDB();
+	$db->Query('SELECT name FROM hz_make WHERE id='.$regmake);
+	if ($db->RowCount) {
+		if ($db->ReadRow()) {
+			$regmake = $db->RowData['name'];
+		}
+	}
+	$db->Query('SELECT modelname FROM hz_model WHERE id='.$regmodel);
+	if ($db->RowCount) {
+		if ($db->ReadRow()) {
+			$regmodel = $db->RowData['modelname'];
+		}
+	}
+	$db->Query('SELECT serial FROM hz_products WHERE productID='.$regcpuno);
+	if ($db->RowCount) {
+		if ($db->ReadRow()) {
+			$regcpuno = $db->RowData['serial'];
+		}
+	}
+	$db->Query('SELECT serial FROM hz_products WHERE productID='.$regcrtno);
+	if ($db->RowCount) {
+		if ($db->ReadRow()) {
+			$regcrtno = $db->RowData['serial'];
+		}
+	}
+	if($reghardware==1){$harware_name="DESKTOP";}
+	if($reghardware==2){$harware_name="LAPTOP";}
+	if($reghardware==3){$harware_name="PRINTER";}
+	if($reghardware==4){$harware_name="SCANNER";}
+		
+	$content = 'A New '. $harware_name.' has been alloted to you. Following are the details';
+	
+	$body ='<!DOCTYPE HTML>
+	<head>
+		<meta http-equiv="content-type" content="text/html" />
+		<meta name="author" content="" />
+	
+		<title>New Asset Request</title>
+	</head>
+	
+	<body>
+	<table>
+	<tr><td>'.$content.'</td></tr>
+	<tr><td>&nbsp;</td></tr>';
+	if ($regprintertype != 0) {
+		$body .= '<tr><td>Type:</td><td>'.$regprintertype.'</td></tr>';
+	}
+	$body .= 
+	'<tr><td>Make</td><td>'.$regmake.'</td></tr>
+	<tr><td>Model</td><td>'.$regmodel.'</td></tr>
+	<tr><td>Serial Number:</td><td>'.$regcpuno.'</td></tr>';
+	
+	if ($reghardware == 1) {
+		$body .= 
+		'<tr><td>Monitor:</td><td>'.$regmonitor.'</td></tr>
+		<tr><td>CRT/TFT Serial Number:</td><td>'.$regcrtno.'</td></tr>';
+	}
+	$body .= 
+	'</table>
+	<br /><br /><br />
+	<p>Regards,</p>
+	<p>Inventory System</p>
+	
+	</body>
+	</html>';
+	$body             = eregi_replace("[\]",'',$body);
+	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	$headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
+	$mail = mail($to,$subject,$body,$headers);
+	if(!$mail) {
+	    return 0;
+	  
+	} else {
+	  
+	  return 1;
+	}
+
 }
 
 if (isset($_REQUEST['functype'])) {
