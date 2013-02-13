@@ -259,7 +259,6 @@ function getassetcode()
 		$resultarr = array();
        
 		$getSql = $db->Query("SELECT * FROM `hz_products` WHERE `productID`=$serial_id");
-        echo $getSql;
        if ($db->RowCount) {
 			while ($db->ReadRow()) {
 				$code = strtoupper($db->RowData['asset_code']);
