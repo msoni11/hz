@@ -712,4 +712,92 @@ $("#txtstockreset").click(function(){
     }
 // js for new other stock form |end|
 
+
+
+//below scrap form handler
+	$("#newscrap").live('click', function(){
+		hz_scrapentry();
+       
+	});
+    
+    	function hz_scrapentry() {
+		$("#loader").show();
+       
+        var hardware      = encodeURIComponent($("#txthardware").val());
+        var make          = encodeURIComponent($("#txtmake").val());
+        var model         = encodeURIComponent($("#txtmodel").val());
+        var serial        = $("#txtcpuno").val();
+        var reason        = encodeURIComponent($("#txtreason").val());
+        var approved      = encodeURIComponent($("#txtapproved").val());
+        
+        
+        
+	if (hardware == '-1') {
+			$("#loader").hide();
+            alert('Select hardware');
+			return;
+        } else if (make == '-1') {
+			$("#loader").hide();
+            alert('Select Make');
+			return;
+        } else if (model=='-1') {
+			$("#loader").hide();
+            alert('Select Model');
+			return;
+        } else if (serial == '-1') {
+			$("#loader").hide();
+            alert('Select Serial');
+			return;
+        } else if (reason == '') {
+			$("#loader").hide();
+            alert('Enter Reason');
+			return;
+        } else if (approved == '') {
+			$("#loader").hide();
+            alert('Enter Approved By');
+			return;
+        } 
+        
+        
+        myData = "functype=newscrap&hardware=" + hardware + "&make=" + make + "&model=" + model + 
+				  "&serial=" + serial + "&reason=" + reason +
+				  "&approved=" + approved ;
+        $.ajax({
+            url:"processor_extra.php",
+            type:"post",
+			data:myData,
+            success: function(result) {
+				if (result == 0) {
+					$("#loader").hide();
+					alert('New scrap has been added succesfully!');
+					window.location.reload();
+				} else if (result == 101){
+					$("#loader").hide();
+					alert('Session expired! Login again');
+					window.location = 'logout.php';
+				} else if (result == 102){
+					$("#loader").hide();
+					alert('Employee ID already exist! Try another');
+				} else if (result == 103){
+					$("#loader").hide();
+					alert('Error creating new employee! Try again later');
+				} else if(result == 105){
+					$("#loader").hide();
+					alert('Error! Reload page or try again later');
+					window.location.reload();
+				} else if (result == 404) {
+					$("#loader").hide();
+					alert('Function not found');
+				} else {
+					$("#loader").hide();
+					alert('Internal update error');
+				}
+            }
+        });
+        
+        
+        }
+
+
+
 });
