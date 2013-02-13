@@ -92,16 +92,17 @@ function newLdapEntry() {
 	$password      = $_REQUEST['password'];
 	$contexts      = $_REQUEST['contexts'];
 	$location      = trim($_REQUEST['location']);
+	$gmEmail       = trim($_REQUEST['gmEmail']);
 	
 	if (!isset($_SESSION['username'])) {
 		echo "101"; // Session expires! Login again
 		die;
-	} else if (isset($hosturl) && isset($version) && isset($ldapencoding) && isset($accountsuffix) && isset($basedn) && isset($adminusername) && isset($password) && isset($contexts) && isset($location)) {
+	} else if (isset($hosturl) && isset($version) && isset($ldapencoding) && isset($accountsuffix) && isset($basedn) && isset($adminusername) && isset($password) && isset($contexts) && isset($location) && isset($gmEmail)) {
 		if (($hosturl != '') && ($version != '') && (is_numeric($version)) && ($ldapencoding != '') && ($accountsuffix != '') && ($basedn != '') && ($adminusername != '') && ($password != '') && ($contexts != '') && ($location != '')) {
 			$db = new cDB();
 			$db1 = new cDB();
-			$sql = "INSERT INTO config_ldap(hostUrl,version,ldapEncoding,accountSuffix,baseDN,userName,password,contexts,location) 
-					VALUES('".$hosturl."','".$version."','".$ldapencoding."','".$accountsuffix."','".$basedn."','".$adminusername."','".$password."','".$contexts."','".$location."')";
+			$sql = "INSERT INTO config_ldap(hostUrl,version,ldapEncoding,accountSuffix,baseDN,userName,password,contexts,location,gmEmail) 
+					VALUES('".$hosturl."','".$version."','".$ldapencoding."','".$accountsuffix."','".$basedn."','".$adminusername."','".$password."','".$contexts."','".$location."','".$gmEmail."')";
 			$db1->Query($sql);
 			if ($db1->LastInsertID) {
 				echo "0"; //status true.Show success message

@@ -14,6 +14,10 @@ $("document").ready(function(){
         save_settings();
     }) ;
 });
+function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+    return pattern.test(emailAddress);
+};
 
 function save_settings()
 {
@@ -28,6 +32,8 @@ function save_settings()
         var usertype      = encodeURIComponent($("#cfg_usertype").val());
         var contexts         = encodeURIComponent($("#cfg_contexts").val());
         var location  =  encodeURIComponent($("#cfg_location").val());
+        var gmEmail = ($("#cfg_gmEmail").val());
+        
         if (cfg_host == '') {
 			$("#loader").hide();
             alert('Enter Host URL');
@@ -78,11 +84,21 @@ function save_settings()
             alert('Enter location');
             $("#cfg_location").focus();
 			return;
+		} else if (gmEmail == '') {
+			$("#loader").hide();
+            alert('Enter GM\'s email please');
+            $("#cfg_gmEmail").focus();
+			return;
+		} else if (!isValidEmailAddress(gmEmail)) {
+			$("#loader").hide();
+            alert('Enter valid email please');
+            $("#cfg_gmEmail").focus();
+			return;
 		}
         
         myData = "functype=newLdapEntry&hosturl=" + cfg_host + "&version=" +cfg_ver + "&ldapencoding=" + encoding + 
 				  "&accountsuffix=" + suffix + "&basedn=" + dn +
-				  "&adminusername=" + username + "&password=" + password + "&contexts="+ contexts +"&location=" + location;
+				  "&adminusername=" + username + "&password=" + password + "&contexts="+ contexts +"&location=" + location + '&gmEmail=' + gmEmail;
                   
                   //console.log(myData);
         $.ajax({
@@ -204,6 +220,12 @@ function save_settings()
 					<div class="text-box-name">Location Name:</div>
 					<div class="text-box-field">
 						<input type="text" name="cfg_location" id="cfg_location" value="" class="form-text" size="30" maxlength="2048" />
+					</div>
+					<div class="text-box-field"></div>
+
+					<div class="text-box-name">GM's Email:</div>
+					<div class="text-box-field">
+						<input type="text" name="cfg_gmEmail" id="cfg_gmEmail" value="" class="form-text" size="30" maxlength="2048" />
 					</div>
 					<div class="text-box-field"></div>
 				</fieldset>
