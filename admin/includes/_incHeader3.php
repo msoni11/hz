@@ -53,6 +53,8 @@ include '../../includes/Application.php';
 					<li><a href="#">LIST</a>
 						<ul>
 							<li><a href="listEmployee.php">Employee</a></li>
+							<li><a href="listAssetRequests.php">Request Approval</a></li>
+							<li><a href="listTransferRequests.php">Transfer Approval</a></li>
 							<li><a href="listAsset.php">IT Asset</a></li>
 							<li><a href="listCriticalAsset.php">Critical Asset</a></li>
 							<li><a href="listConsumable.php">Consumable Items</a></li>
