@@ -703,11 +703,11 @@ $("#txtregreset").click(function(){
 			$("#loader").hide();
             alert('Enter IP Address !');
 			return;
-		} else if (regip != 'NONE' && !fnValidateIPAddress(regip)) {
+		} /*else if (regip != 'NONE' && !fnValidateIPAddress(regip)) {
 			$("#loader").hide();
             alert('Enter Correct IP Address !');
 			return;
-		} else if (regoffice == '-1') {
+		} */else if (regoffice == '-1') {
 			$("#loader").hide();
             alert('Select Office Version !');
 			return;
