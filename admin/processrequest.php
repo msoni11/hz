@@ -1119,7 +1119,7 @@ function newip() {
 			$db = new cDB();
 			$db1 = new cDB();
 			$durationfrom = mktime(0,0,0,(int)$ipdurationfromm,(int)$ipdurationfromd,(int)$ipdurationfromy);
-			$durationto = mktime(0,0,0,(int)$ipdurationtodm,(int)$ipdurationtod,(int)$ipdurationtoy);
+			$durationto = mktime(0,0,0,(int)$ipdurationtom,(int)$ipdurationtod,(int)$ipdurationtoy);
 			
 			$sql = "INSERT INTO hz_ip(auditorName,unit,ip,internet,repPerson,repPersonEmail,mobile,durationFrom,durationTo) 
 					VALUES('".$ipname."','".$ipunit."','".$ipaddr."','".$ipinternet."','".$iprepperson."','".$ipreppersonmail."','".$ipmobile."','".$durationfrom."','".$durationto."')";
