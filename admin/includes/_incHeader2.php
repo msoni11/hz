@@ -85,7 +85,7 @@ include '../../includes/Application.php';
 					<!-- <li><a href="../addNetwork.php">NETWORK</a></li>-->
 					<li><a href="../criticalasset.php">CRITICAL ASSET</a></li>
 					<li><a href="../importcsv.php">IMPORT</a></li>
-					<li><a href="../scrap.php">SCRAP</a></li>
+					<li><a href="../addScrap.php">SCRAP</a></li>
 					<li><a href="../ip.php">IP</a></li>
 					<li><a href="../addIPAddress.php">Add IP</a></li>
 					<li><a href="../addLocation.php">Add Location</a></li>
