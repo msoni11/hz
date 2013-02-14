@@ -126,7 +126,14 @@ $body             = eregi_replace("[\]",'',$body);
 
 $mail->Subject    = $subject;
 
-$hod_mail = "him.developer@gmail.com";
+$db = new cDB();
+$getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]);
+        //echo $getSql;
+       if ($db->RowCount) {
+			while ($db->ReadRow()) {
+				$code = strtoupper($db->RowData['gmEmail']);
+			}
+$hod_mail = $code;
 $headers  = 'MIME-Version: 1.0' . "\r\n";
 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 $headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
@@ -420,9 +427,14 @@ $body ='<!DOCTYPE HTML>
 </body>
 </html>';
 $body             = eregi_replace("[\]",'',$body);
-
-
-$hod_mail = "him.developer@gmail.com";
+$db = new cDB();
+$getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]);
+        //echo $getSql;
+       if ($db->RowCount) {
+			while ($db->ReadRow()) {
+				$code = strtoupper($db->RowData['gmEmail']);
+			}
+$hod_mail = $code;
 $headers  = 'MIME-Version: 1.0' . "\r\n";
 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 $headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
