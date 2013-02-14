@@ -66,7 +66,7 @@ function newip() {
 
 function newlocation()
 {
-    $location = mysql_real_escape_string(trim($_REQUEST["location"]));
+    $location = mysql_real_escape_string(trim(strtoupper($_REQUEST["location"])));
     if (!isset($_SESSION['username']))
          {
     		echo "101"; // Session expires! Login again

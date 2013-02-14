@@ -121,6 +121,7 @@ function newregistration() {
 	$regday = $_REQUEST['regday'];
 	$regmonth = $_REQUEST['regmonth'];
 	$regyear = $_REQUEST['regyear'];
+	$regcurrlocation = $_REQUEST['currlocation'];
 	$regotherasset = strtoupper($_REQUEST['regotherasset']);
 	$regstatus = strtoupper($_REQUEST['regstatus']);
 
@@ -282,10 +283,10 @@ function newregistration() {
 								}
 								$sql = "INSERT INTO hz_registration(empid, hardware, cartage, printertype, make, model, cpuno,
 																	monitortype, monitorno, sysconfig, assetcode, ipaddr, 
-																	internet, internettype, warnorvendor, date, status
+																	internet, internettype, warnorvendor, date,location, status
 																	) 
 										VALUES('".$regempid."','".$reghardware."','".$regcartage."','".$regprintertype."','".$regmake."','".$regmodel."','".$regcpuno."','".$regmonitor."','".$regcrtno."','".$regconfig."',
-												'".$regasset."','".$regip."','".$reginternet."','".$regamc."','".$warnvendor."','".$date."','".$regstatus."')";
+												'".$regasset."','".$regip."','".$reginternet."','".$regamc."','".$warnvendor."','".$date."','".$regcurrlocation."','".$regstatus."')";
 							
 								$db1->Query($sql);
 								if ($db1->LastInsertID) {

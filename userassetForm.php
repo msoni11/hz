@@ -454,7 +454,7 @@ $("document").ready(function(){
                  <?php 
 				$db->Query("SELECT * FROM hz_locations");
 				?>
-					<select name="txtlocation" id="txtlocation"  class="form-text" >	
+					<select name="txtcurrlocation" id="txtcurrlocation"  class="form-text" >	
                     <option value='-1'>----Select Location----</option>
 						
 						<?php 

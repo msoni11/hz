@@ -589,6 +589,7 @@ $("#txtregreset").click(function(){
 		var regday         = $("#txtday").val();
 		var regmonth       = $("#txtmonth").val();
 		var regyear        = $("#txtyear").val();
+		var regcurrlocation= $("#txtcurrlocation").val();
 		var regotherasset  = encodeURIComponent($("#txtotheritasset").val());
 		var regstatus      = encodeURIComponent($.trim($("#txtregstatus").val()));
 
@@ -806,7 +807,7 @@ $("#txtregreset").click(function(){
 				"&regmonitor=" + regmonitor + "&regcrtno=" + regcrtno + "&regconfig=" + regconfig + 
 				"&regasset=" + regasset + "&regassettext=" + regassettext + "&regip=" + regip+ "&regoffice=" + regoffice+ 
 				"&reglicense=" + reglicense+ "&reginternet=" + reginternet+ "&regamc=" + regamc + "&regvendor=" + regvendor + 
-				"&regday=" + regday + "&regmonth=" + regmonth + "&regyear=" + regyear + "&regotherasset=" + regotherasset+
+				"&regday=" + regday + "&regmonth=" + regmonth + "&regyear=" + regyear + "&regotherasset=" + regotherasset+ "&currlocation="+regcurrlocation +
 				"&regstatus=" + regstatus;
 	} else 	if (regamc == 'WAR') {
 		var allData = "functype=newregistration&regempid=" + regempid + "&regempname=" + regempname +
@@ -816,7 +817,7 @@ $("#txtregreset").click(function(){
 				"&regmonitor=" + regmonitor + "&regcrtno=" + regcrtno + "&regconfig=" + regconfig + 
 				"&regasset=" + regasset + "&regassettext=" + regassettext + "&regip=" + regip+ "&regoffice=" + regoffice+ 
 				"&reglicense=" + reglicense+ "&reginternet=" + reginternet + "&regamc=" + regamc + "&regwarnday=" + regwarnday + "&regwarnmonth=" + regwarnmonth +
-				"&regwarnyear=" + regwarnyear + "&regday=" + regday + "&regmonth=" + regmonth + "&regyear=" + regyear + "&regotherasset=" + regotherasset+
+				"&regwarnyear=" + regwarnyear + "&regday=" + regday + "&regmonth=" + regmonth + "&regyear=" + regyear + "&regotherasset=" + regotherasset+"&currlocation="+regcurrlocation +
 				"&regstatus=" + regstatus;
 	}
 	
