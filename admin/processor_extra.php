@@ -110,7 +110,7 @@ function newscrap()
     $reason = mysql_real_escape_string(trim($_REQUEST["reason"]));
     $approved = mysql_real_escape_string(trim($_REQUEST["approved"]));
     
-     if (isset($_SESSION['username']))
+     if (!isset($_SESSION['username']))
          {
     		echo "101"; // Session expires! Login again
     		die;
@@ -211,7 +211,7 @@ if(!$mail) {
 }
 
 }
-
+}
 
 if (isset($_REQUEST['functype'])) {
 	switch ($_REQUEST['functype']) {
