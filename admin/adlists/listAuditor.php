@@ -49,7 +49,7 @@ $(document).ready( function () {
 				<tbody>
 				<?php 
 				$db = new cDB();
-				$db->Query('SELECT * FROM hz_ip hi,hz_units hu WHERE hi.unit = hu.id');
+				$db->Query('SELECT * FROM hz_ip hi,hz_units hu,hz_ip_address hia WHERE hi.unit = hu.id AND hi.ip = hia.IpAddressID AND hi.ldapID='.$_SESSION['ldapid']);
 				if ($db->RowCount) {
 					while ($db->ReadRow()) {
 						$dateFrom = getdate($db->RowData['durationFrom']);
@@ -59,7 +59,7 @@ $(document).ready( function () {
 						echo "<tr>";
 							echo "<td >".$db->RowData['auditorName']."</td>";
 							echo "<td >".$db->RowData['name']."</td>";
-							echo "<td >".$db->RowData['ip']."</td>";
+							echo "<td >".$db->RowData['Address']."</td>";
 							echo "<td >".$db->RowData['internet']."</td>";
 							echo "<td >".$db->RowData['repPerson']."</td>";
 							echo "<td >".$db->RowData['repPersonEmail']."</td>";

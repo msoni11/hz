@@ -45,8 +45,22 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 1) {
 				<div class="text-box-field"><div id="unittext"></div></div>
 
 				<div class="text-box-name">IP Address:</div>
+                <?php 
+				$db->Query("SELECT * FROM hz_ip_address WHERE IpAddressID NOT IN ( SELECT ip FROM hz_ip WHERE ldapID=".$_SESSION['ldapid'].")");
+				?>
 				<div class="text-box-field">
-					<input type="text" name="txtipaddress" id="txtipaddress" value="" class="form-text" size="30" maxlength="2048" />				
+					<select name="txtipaddress" id="txtipaddress"  class="form-text" style="width:91%">	
+                    <option value='-1'>----Select IP Address----</option>
+						
+						<?php 
+						if ($db->RowCount) { 
+							while ($db->ReadRow()) {
+								echo '<option value="'.($db->RowData['IpAddressID']).'">'.$db->RowData['Address'].'</option>';
+							} 
+						}
+						?>
+						
+					</select>			
 				</div>
 				<div class="text-box-field"></div>
 

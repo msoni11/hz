@@ -1110,7 +1110,8 @@ function newip() {
     $ipdurationtod   = $_REQUEST['txtipdurationtoday'];
     $ipdurationtom   = $_REQUEST['txtipdurationtomonth'];
     $ipdurationtoy   = $_REQUEST['txtipdurationtoyear'];
-	
+    $ldapid          = $_SESSION['ldapid'];
+    
 	if (!isset($_SESSION['username'])) {
 		echo "101"; // Session expires! Login again
 		die();
@@ -1121,8 +1122,8 @@ function newip() {
 			$durationfrom = mktime(0,0,0,(int)$ipdurationfromm,(int)$ipdurationfromd,(int)$ipdurationfromy);
 			$durationto = mktime(0,0,0,(int)$ipdurationtom,(int)$ipdurationtod,(int)$ipdurationtoy);
 			
-			$sql = "INSERT INTO hz_ip(auditorName,unit,ip,internet,repPerson,repPersonEmail,mobile,durationFrom,durationTo) 
-					VALUES('".$ipname."','".$ipunit."','".$ipaddr."','".$ipinternet."','".$iprepperson."','".$ipreppersonmail."','".$ipmobile."','".$durationfrom."','".$durationto."')";
+			$sql = "INSERT INTO hz_ip(auditorName,unit,ip,internet,repPerson,repPersonEmail,mobile,durationFrom,durationTo, ldapID) 
+					VALUES('".$ipname."','".$ipunit."','".$ipaddr."','".$ipinternet."','".$iprepperson."','".$ipreppersonmail."','".$ipmobile."','".$durationfrom."','".$durationto."','".$ldapid."')";
 			$db1->Query($sql);
 			if ($db1->LastInsertID) {
 				$mailStatus = sendAuditorMail($ipreppersonmail,'Auditor\'s IP Allotment');

@@ -1861,15 +1861,15 @@ $("#txtntwrkmake").change(function(){
 			$("#loader").hide();
             alert('Enter unit please!');
 			return;
-        }*/ else if (ipaddr == '') {
+        }*/ else if (ipaddr == '-1') {
 			$("#loader").hide();
-            alert('Enter IP Address !');
+            alert('Select IP Address !');
 			return;
-		} else if (ipaddr != '' && !fnValidateIPAddress(ipaddr)) {
+		}/* else if (ipaddr != '' && !fnValidateIPAddress(ipaddr)) {
 			$("#loader").hide();
             alert('Enter Correct IP Address !');
 			return;
-		} else if (iprepperson == '') {
+		}*/else if (iprepperson == '') {
 			$("#loader").hide();
             alert('Enter Reporting person');
 			return;
@@ -1944,7 +1944,7 @@ $("#txtntwrkmake").change(function(){
 					window.location.reload();
 				} else if (result == 1) {
 					$("#loader").hide();
-					alert('IP has been succesfully added! Mail Sent');
+					alert('IP has been succesfully added! Mail not sent');
 					window.location.reload();
 				} else if (result == 101){
 					$("#loader").hide();
