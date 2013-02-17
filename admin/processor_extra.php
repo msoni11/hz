@@ -177,6 +177,32 @@ if($request_info["hardware"]==1){$harware_name="DESKTOP";}
 if($request_info["hardware"]==2){$harware_name="LAPTOP";}
 if($request_info["hardware"]==3){$harware_name="PRINTER";}
 if($request_info["hardware"]==4){$harware_name="SCANNER";}
+$db = new cDB();
+$db->Query("SELECT name FROM hz_hardware WHERE id=".$_REQUEST['hardware']);
+if ($db->RowCount) {
+	if ($db->ReadRow()) {
+		$hwname = $db->RowData['name'];
+	}
+}
+$db->Query("SELECT name FROM hz_make WHERE id=".$_REQUEST['make']);
+if ($db->RowCount) {
+	if ($db->ReadRow()) {
+		$make = $db->RowData['name'];
+	}
+}
+$db->Query("SELECT modelname FROM hz_model WHERE id=".$_REQUEST['model']);
+if ($db->RowCount) {
+	if ($db->ReadRow()) {
+		$model = $db->RowData['modelname'];
+	}
+}
+$db->Query("SELECT serial FROM hz_products WHERE productID=".$_REQUEST['serial']);
+if ($db->RowCount) {
+	if ($db->ReadRow()) {
+		$serial = $db->RowData['serial'];
+	}
+}
+
 $body ='<!DOCTYPE HTML>
 <head>
 	<meta http-equiv="content-type" content="text/html" />
@@ -187,19 +213,34 @@ $body ='<!DOCTYPE HTML>
 
 <body>
 <table>
-<tr><td colspan="2">Hardware has been added to scrap with following details:</td></tr>
+<tr><td colspan="2">Waiting For Your Approval </td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td colspan="2">IT Team Wants to Scrap This Hardware Following Details Are:-</td></tr>
 <tr>
     <td>Hardware :</td>
-    <td>'.$harware_name.'</td>
+    <td>'.$hwname.'</td>
 </tr>
+<tr>
+    <td>Make :</td>
+    <td>'.$make.'</td>
+</tr>
+<tr>
+    <td>Model :</td>
+    <td>'.$model.'</td>
+</tr>
+<tr>
+    <td>Hardware :</td>
+    <td>'.$serial.'</td>
+</tr>
+
 
 <tr>
     <td>Reason:</td>
     <td>'.$_REQUEST["reason"].'</td>
 </tr>
 <tr>
-<td>Apporved By:</td>
-<td>'.$_REQUEST["approved"].'</td>
+	<td>For Apporvel:</td>
+	<td>'.$_REQUEST["approved"].'</td>
 </tr>
 <tr><td></td><td><a href="'.$approve_url.'">Approve</a>&nbsp;&nbsp;<a href="'.$reject_url.'">Reject</a></td></tr>
 <tr><td></td></tr>

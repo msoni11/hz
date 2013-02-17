@@ -14,23 +14,23 @@ $(document).ready( function () {
 			"aButtons": [
 				{
 					"sExtends": "copy",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6]
 				},
 				{
 					"sExtends": "csv",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6]
 				},
 				{
 					"sExtends": "xls",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6]
 				},
 				{
 					"sExtends": "pdf",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6]
 				},
 				{
 					"sExtends": "print",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6]
 				}
 			]
 		},									

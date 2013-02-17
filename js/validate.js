@@ -1915,20 +1915,11 @@ $("#txtntwrkmake").change(function(){
 			alert('Select duration to year!');
 			return;
 		}
-	    if (ipdurationtoy >= ipdurationfromy) {
-	    	if (ipdurationtom >= ipdurationfromm) {
-	    		if (ipdurationtod < ipdurationfromd) {
-					$("#loader").hide();
-					alert('Duration to must be greater than duration from');
-					return;
-	    		}
-	    	} else {
-				$("#loader").hide();
-				alert('Duration to must be greater than duration from');
-				return;
-	    	}
-	    } else {
-			$("#loader").hide();
+        var d = new Date();
+        var dTo   = d.setFullYear(ipdurationtoy,ipdurationtom,ipdurationtod);
+        var dFrom = d.setFullYear(ipdurationfromy,ipdurationfromm,ipdurationfromd);
+		if (dTo < dFrom) {
+        	$("#loader").hide();
 			alert('Duration to must be greater than duration from');
 			return;
 	    }
