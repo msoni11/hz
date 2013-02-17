@@ -20,14 +20,20 @@ if(isset($_REQUEST["mapproved"]) && !empty($_REQUEST["request_id"]))
             {
                 $req_id = $_REQUEST["request_id"];
                	$db1 = new cDB();
-    			$sql = "UPDATE hz_asset_requests SET Status = 1 WHERE  requestID = ".$req_id;
+               	$db = new cDB();
+               	$sql = "UPDATE hz_asset_requests SET Status = 1 WHERE  requestID = ".$req_id;
     			if($db1->Query($sql))
                 {
                     $approved=1;
-                    if(sendMailToHOD("Adminstrator@hz.com","New Asset Request",$resultarr))
-                    {
-                        $approved++;
-                    }//send email to HOD
+                    $db->Query("SELECT gmEmail FROM config_ldap cl, hz_asset_requests har WHERE cl.id=har.ldapID AND  har.requestID=".$req_id);
+                    if ($db->RowCount) {
+                    	if ($db->ReadRow()) {
+		                    if(sendMailToHOD($db->RowData['gmEmail'],"New Asset Request",$resultarr))
+		                    {
+		                        $approved++;
+		                    }//send email to HOD
+                    	}
+                    }
                 }
                 else
                 {

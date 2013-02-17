@@ -70,11 +70,11 @@ $("document").ready(function(){
 				if (result == 0) {
 					$("#loader").hide();
 					alert('New Request has been added succesfully! Mail NOT Sent');
-					//window.location.reload();
+					window.location.reload();
 				}else if (result == 1){
 					$("#loader").hide();
 					alert('New Request has been added succesfully! Mail Sent');
-					//window.location.reload();
+					window.location.reload();
 				}  else if (result == 101){
 					$("#loader").hide();
 					alert('Session expired! Login again');
@@ -279,7 +279,7 @@ $("document").ready(function(){
 				} else {
 					$("#loader").hide();
 					var arr = $.parseJSON(result);
-					if ($('#requestor').val() == arr['empiddesc']) {
+					if ($('#requestor').val() == reggetempid) {
 					    alert('You are not allowed to transfer request to yourself');
 						$("#txtempid").val('');
 						$("#txtempiddesc").val('');

@@ -19,8 +19,8 @@ function newrequest() {
 	if (isset($empid)  && isset($hardware) && isset($reason) && isset($have) && isset($type) ) {
 		if (($empid != '')   && ($hardware != '') && ($reason != '') && ($have != '') && ($type != '') ) {
 			$db1 = new cDB();
-			$sql = "INSERT INTO hz_asset_requests(EmployeeID,HardwareID,Reason,HaveAssets,Executive,ManagerUsername,Status) 
-						VALUES('".$empid."','".$hardware."','".$reason."','".$have."','".$type."','".$manager."',0)";
+			$sql = "INSERT INTO hz_asset_requests(EmployeeID,HardwareID,Reason,HaveAssets,Executive,ManagerUsername,Status,ldapID) 
+						VALUES('".$empid."','".$hardware."','".$reason."','".$have."','".$type."','".$manager."',0,".$_SESSION['ldapid'].")";
 			$db1->Query($sql);
             $new =$db1->LastInsertID;
 				if ($new) {
@@ -87,8 +87,8 @@ function newTrequest() {
             
             if($responce)
             {
-            $sql = "INSERT INTO hz_transfer_requests(RequestorID,EmployeeID,HardwareID,TransferReason,ProductID,Email,ReceiversManagerMail,Status) 
-						VALUES('".$requestor."','".$empid."','".$hardware."','".$reason."','".$serial."','".$email."','".$rmanagermail."',0)";
+            $sql = "INSERT INTO hz_transfer_requests(RequestorID,EmployeeID,HardwareID,TransferReason,ProductID,Email,ReceiversManagerMail,Status,ldapID) 
+						VALUES('".$requestor."','".$empid."','".$hardware."','".$reason."','".$serial."','".$email."','".$rmanagermail."',0,".$_SESSION['ldapid'].")";
 			$db1->Query($sql);
             $new =$db1->LastInsertID;
 			if ($new) {
@@ -132,7 +132,7 @@ function getserials() {
     {//echo "SELECT * FROM hz_products WHERE productID	 IN (SELECT cpuno FROM `hz_registration` WHERE `hardware`=$hardware_id AND `empid`='".$username."' )";
        $db = new cDB();
 		$resultarr = array();
-		$getSql = $db->Query("SELECT * FROM hz_products WHERE productID	 IN (SELECT cpuno FROM `hz_registration` WHERE `hardware`=$hardware_id AND `empid`='".$username."' )");
+		$getSql = $db->Query("SELECT * FROM hz_products WHERE productID	 IN (SELECT cpuno FROM `hz_registration` WHERE `hardware`=$hardware_id AND `empid`='".$username."' AND activestatus='A' )");
 		if ($db->RowCount) {
 			while ($db->ReadRow()) {
 				$resultarr[$db->RowData['productID']] = strtoupper($db->RowData['serial']);

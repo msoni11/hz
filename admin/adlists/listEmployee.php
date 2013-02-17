@@ -14,23 +14,23 @@ $(document).ready( function () {
 			"aButtons": [
 				{
 					"sExtends": "copy",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6,7]
 				},
 				{
 					"sExtends": "csv",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6,7]
 				},
 				{
 					"sExtends": "xls",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6,7]
 				},
 				{
 					"sExtends": "pdf",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6,7]
 				},
 				{
 					"sExtends": "print",
-					"mColumns": [0,1,2,3,4]
+					"mColumns": [0,1,2,3,4,5,6,7]
 				}
 			]
 		},									
@@ -60,7 +60,13 @@ $(document).ready( function () {
         $users = $adldap->user()->all();
         foreach ($users as $key=>$user) {
         	$userinfo[] = $adldap->user()->info($user, array('mail','description','name','department','title','manager'));
-       		$managerinfo[] = $adldap->contact()->info($userinfo[0][0]['manager'][0],array('name','mail')); 
+       		for ($j=0;$j<count($options);$j++) {
+        		$adldapmgr = initializeLDAP($options[$j]);
+       			$managerinfo[] = $adldapmgr->contact()->info($userinfo[0][0]['manager'][0],array('name','mail')); 
+	        	if (!empty($managerinfo)) {
+	        		break;
+	        	}
+       		}
         	$username[] = $user;
         	$empinfo[] = array_merge($userinfo, $managerinfo, $username);
         	unset($userinfo);
@@ -83,6 +89,7 @@ $(document).ready( function () {
 						<th >Department</th>
 						<th >Designation</th>
 						<th >Email</th>
+						<th >Manager OU</th>
 						<th >Manager</th>
 						<th >Manager email</th>
 					</tr>
@@ -98,6 +105,7 @@ $(document).ready( function () {
 						echo "<td >".$empinf[0][0]['department'][0]."</td>";
 						echo "<td >".$empinf[0][0]['title'][0]."</td>";
 						echo "<td >".$empinf[0][0]['mail'][0]."</td>";
+						echo "<td >".$empinf[0][0]['manager'][0]."</td>";
 						echo "<td >".$empinf[1][0]['name'][0]."</td>";
 						echo "<td >".$empinf[1][0]['mail'][0]."</td>";
 					echo "</tr>";

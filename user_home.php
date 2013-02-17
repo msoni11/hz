@@ -7,7 +7,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 0) {
 }
 ?>
 <!-- Content start -->
-<div id="container" class="box1">
+<!-- <div id="container" class="box1">
 	<div id="obsah" class="content box1">
 	<div id="center">
 	<div style="padding:0px 0px 0px 210px">
@@ -19,7 +19,14 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 0) {
 	</div>
 	</div>
 	</div>
+</div>-->
+
+<div id="container" class="box1">
+	<div id="centralImage">
+		<img src="images/logo.gif" /><h1>INVENTORY MANAGEMENT SYSTEM</h1>
+	</div>
 </div>
+
 <!-- Content End -->
 <?php
 include 'includes/_incFooter.php';

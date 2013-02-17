@@ -18,11 +18,15 @@ $("#trackSer").live('click', function() {
 		type:'POST',
 		success: function(val){
 			if (val == 104){
+				$("#loader").hide();
 				alert('Form field not receiver! Try again later');
 				window.location.reload
 			} else if (val == 103) {
+				$("#loader").hide();
 				alert('No record(s) found with this serial number');
+				$("#hideDetails").empty();				
 			} else if (val == 101) {
+				$("#loader").hide();
 				alert('Session expired! Login again');
 				window.location = 'logout.php';
 			} else {

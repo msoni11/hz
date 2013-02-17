@@ -53,7 +53,7 @@ if(!$mail) {
 
 
 
-function sendMailToHOD($from,$subject,$request_info)
+function sendMailToHOD($to,$subject,$request_info)
 {
 
 $url = explode("/",$_SERVER["SCRIPT_NAME"]);
@@ -127,7 +127,7 @@ $body             = eregi_replace("[\]",'',$body);
 $mail->Subject    = $subject;
 
 $db = new cDB();
-if (isset($_SESSION["ldapid"])) {
+/*if (isset($_SESSION["ldapid"])) {
 $getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]);
         //echo $getSql;
        if ($db->RowCount) {
@@ -136,9 +136,9 @@ $getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]
 			}
 } else {
 	$code = 'avanik35@gmail.com';
-}
+}*/
 
-$hod_mail = $code;
+$hod_mail = $to;
 $headers  = 'MIME-Version: 1.0' . "\r\n";
 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 $headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
@@ -153,7 +153,7 @@ if(!$mail) {
   return 1;
 }
 
-}
+//}
 }
 
 
@@ -347,7 +347,7 @@ if(!$mail) {
 
 
 
-function sendMailToHOD2($from,$subject,$request_info,$requestor_details)//mail send to HOD with Transfer request having details of both employees 
+function sendMailToHOD2($to,$subject,$request_info,$requestor_details)//mail send to HOD with Transfer request having details of both employees 
 {
 
 $url = explode("/",$_SERVER["SCRIPT_NAME"]);
@@ -434,7 +434,7 @@ $body ='<!DOCTYPE HTML>
 </html>';
 $body             = eregi_replace("[\]",'',$body);
 $db = new cDB();
-if (isset($_SESSION["ldapid"])) {
+/*if (isset($_SESSION["ldapid"])) {
 $getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]);
         //echo $getSql;
        if ($db->RowCount) {
@@ -443,8 +443,8 @@ $getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]
 			}
 } else {
 	$code = 'avanik35@gmail.com';
-}
-$hod_mail = $code;
+}*/
+$hod_mail = $to;
 $headers  = 'MIME-Version: 1.0' . "\r\n";
 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 $headers .= 'From: Webmaster <Webmaster@hz.com>' . "\r\n";
@@ -459,6 +459,6 @@ if(!$mail) {
   return 1;
 }
 
-}
+//}
 }
 ?>

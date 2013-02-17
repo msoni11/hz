@@ -1162,11 +1162,16 @@ function sendAuditorMail($to,$subject)
 	$dateFrom = $_REQUEST["txtipdurationfromday"].'/'.$_REQUEST["txtipdurationfrommonth"].'/'.$_REQUEST["txtipdurationfromyear"];
 	$dateTo = $_REQUEST["txtipdurationtoday"].'/'.$_REQUEST["txtipdurationtomonth"].'/'.$_REQUEST["txtipdurationtoyear"];
 	
-	$content = 'A new IP <b>'. $_REQUEST['txtipaddress'] . '</b> ';
+	$db = new cDB();
+	$db->Query("SELECT Address FROM hz_ip_address WHERE IpAddressID=".$_REQUEST['txtipaddress']);
+	if ($db->RowCount) {
+		if ($db->ReadRow()) {
+			$content = 'A new IP <b>'. $db->RowData['Address'] . '</b> ';
+		}
+	}
 	$content .= $_REQUEST["txtipinternet"] == 'YES' ? 'with' : 'withoout';
 	$content .= ' internet has been alloted to the <b>'. $_REQUEST['txtipname']. '</b>';
 	$content .= ' from '. $dateFrom . ' to '. $dateTo;
-	$db = new cDB();
 	$db->Query('SELECT name FROM hz_units WHERE id='. $_REQUEST['txtipunit']);
 	if ($db->RowCount) {
 		if ($db->ReadRow()) {

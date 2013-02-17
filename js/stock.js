@@ -295,9 +295,15 @@ $("#txtstockreset").click(function(){
 						}
 					});
                    var table='<table>';
-                   table+='<tr>';
-                   table+='<th><div class="text-box-field" style="float:left;color:red;">CPU Serial #:</div></th><th><div class="text-box-field" style="float:left;color:red;" >Monitor Serial #:</div></th>';
-                   table+='</tr>';
+                   if (stockhardware == 1) {
+	                   table+='<tr>';
+	                   table+='<th><div class="text-box-field" style="float:left;color:red;">CPU Serial #:</div></th><th><div class="text-box-field" style="float:left;color:red;" >Monitor Serial #:</div></th>';
+	                   table+='</tr>';
+                   } else {
+	                   table+='<tr>';
+	                   table+='<th><div class="text-box-field" style="float:left;color:red;">Serial #:</div></th>';
+	                   table+='</tr>';
+                   }
                    for(var i=1;i<=stockquantity;i++)
                       {
                       table+='<tr>'; 

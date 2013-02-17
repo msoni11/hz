@@ -159,15 +159,21 @@ if(isset($_REQUEST["smapproved"]) && !empty($_REQUEST["request_id"]))
         if($_REQUEST["smapproved"]==1 )
             {
                 $req_id = $_REQUEST["request_id"];
-               	$db1 = new cDB();
+               	$db = new cDB();
+                $db1 = new cDB();
     			$sql = "UPDATE hz_transfer_requests SET Status = 3 WHERE  requestID = ".$req_id;
     			if($db1->Query($sql))
                 {
                     $smapproved=1;
-                    if(sendMailToHOD2("Adminstrator@hz.com","New Asset Transfer Request",$resultarr,$requestor_details))
-                    {
-                        $smapproved++;
-                    }//send email to HOD
+                    $db->Query("SELECT gmEmail FROM config_ldap cl, hz_transfer_requests har WHERE cl.id=har.ldapID AND  har.requestID=".$req_id);
+                    if ($db->RowCount) {
+                    	if ($db->ReadRow()) {
+		                    if(sendMailToHOD2($db->RowData['gmEmail'],"New Asset Transfer Request",$resultarr,$requestor_details))
+		                    {
+		                        $smapproved++;
+		                    }//send email to HOD
+                    	}
+                    }
                 }
                 else
                 {
