@@ -619,7 +619,9 @@ function newstock() {
     if(isset($_REQUEST["cpu_serials"]))
     {
      $cpu_serials          = explode(",",$_REQUEST["cpu_serials"]);
-     $m_serials            = explode(",",$_REQUEST["monitor_serials"]); 
+     if ($stockhardware == 1) {
+	     $m_serials            = explode(",",$_REQUEST["monitor_serials"]); 
+     }
      $config              = $_REQUEST["config"];
      if($config==0)
      {$other  = mysql_real_escape_string(trim($_REQUEST["others"]));}
@@ -803,10 +805,15 @@ function newstock() {
                      $insert_sql = "INSERT INTO hz_products(stockID,configurationID,serial,status,asset_code) VALUES ";
                         $values="";
                         $c=0;
+                        if ($stockhardware == 1) {
+                        	$numcount = count($cpu_serials);
+                        } else {
+                        	$numcount = count($cpu_serials)-1;
+                        }
                         foreach($cpu_serials as $val)
                         {
                             $values.="( $stockID , $config,'".$val."' , 1,'".$asset_code.$val."'  )";
-                            if($c!=count($cpu_serials))
+                            if($c!=$numcount)
                             {
                                 $values.=" , ";
                             }

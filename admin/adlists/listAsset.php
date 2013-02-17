@@ -35,7 +35,7 @@ $(document).ready( function () {
 			]
 		},									
 		"bProcessing": false,
-		"bServerSide":true,
+		//"bServerSide":true,
 		"iDisplayStart":0,
 		"iDisplayLength":10,
 		"sPaginationType": "full_numbers",
@@ -84,11 +84,12 @@ $(document).ready( function () {
 				$db = new cDB();
 				$db1 = new cDB();
 				$sql = "SELECT hr.* FROM 
-						hz_registration hr LEFT OUTER JOIN hz_employees he ON (hr.empid = he.empid)";
+						hz_registration hr LEFT OUTER JOIN hz_employees he ON (hr.empid = he.empid) WHERE hr.activestatus='A'";
 				$db1->Query($sql);
 				if ($db1->RowCount) {
 					while ($db1->ReadRow()) {
 						$empid      = $db1->RowData['empid'];
+						$assetID    = $db1->RowData['id'];
 						$hardware   = $db1->RowData['hardware'];
 						$cartage    = $db1->RowData['cartage'];
 						$pritertype = $db1->RowData['printertype'];
@@ -182,6 +183,7 @@ $(document).ready( function () {
 							}
 						}
 					$pritertype = $pritertype == 0 ? 'NONE' : $pritertype;
+					$monitorno  = $monitorno == -1 ? 'NONE' : $monitorno;
 					if ($internettype != 'AMC') {
 						$worv         = getdate($warnorvendor);
 						$warnorvendor = $worv['mday'].'/'.$worv['mon'].'/'.$worv['year'];
@@ -213,6 +215,7 @@ $(document).ready( function () {
 						echo "<td >".$date ."</td>";
 						echo "<td >".$location ."</td>";
 						echo "<td >".$status ."</td>";
+						echo "<td ><input type='hidden' name='assetID' id='assetID' value='".$assetID."' /><a href='#'><img src='../images/delete-icon.png'' id='moveToS' alt='Click to move it to store' title='Click to move it to store' /></a></td>";
 					echo "</tr>";
 						
 					}

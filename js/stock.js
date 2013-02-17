@@ -268,13 +268,18 @@ $("#txtstockreset").click(function(){
       //apending input elements to hidden div
       $("#space_for_table").empty();
       $("#space_for_table").append('<legend>Enter product serial numbers:</legend>');
-      if(stockhardware==1)
+      if(stockhardware!=0)
       {
+    	if (stockhardware == 3) {
+    		var vardata ="functype=geteprintermodel&printertypeid=" + stocktype;
+    	} else {
+    		var vardata ="functype=getemodel&makeid=" + stockmake;
+    	}
         var config_select="";
         $.ajax({
 			    url:"getrequest.php",
 			    type:"post",
-				    data:"functype=getemodel&makeid=" + stockmake,
+				data:vardata,
 				success: function(result) {
 				var arr = $.parseJSON(result);
                 
@@ -290,14 +295,16 @@ $("#txtstockreset").click(function(){
 						}
 					});
                    var table='<table>';
-                  table+='<tr>';
+                   table+='<tr>';
                    table+='<th><div class="text-box-field" style="float:left;color:red;">CPU Serial #:</div></th><th><div class="text-box-field" style="float:left;color:red;" >Monitor Serial #:</div></th>';
                    table+='</tr>';
                    for(var i=1;i<=stockquantity;i++)
                       {
                       table+='<tr>'; 
                       table+='<td><div class="text-box-field"><input type="text" name="cpu_serial[]" id="cpu_serial_number_'+i+'"  class="form-text" size="30"/></div></td>';
-                      table+='<td><div class="text-box-field"><input type="text" name="m_serial[]" id="m_serial_number_'+i+'"  class="form-text" size="30"/></div></td>';
+                      if (stockhardware == 1) {
+                    	  table+='<td><div class="text-box-field"><input type="text" name="m_serial[]" id="m_serial_number_'+i+'"  class="form-text" size="30"/></div></td>';
+                      }
                       table+='</tr>';
                      }
                       table+='<tr><td colspan="2"><div class="text-box-field" style="float:left;color:red;width:170px;" >Configuration:</div></td></tr>'; 
@@ -347,7 +354,7 @@ $("#txtstockreset").click(function(){
             
             //var stockhardware      = encodeURIComponent($("#txtaddhardware").val());
             
-            if(stockhardware==1)
+            if(stockhardware!=0)
             {
                 var configs1="";
                 for(var i=1;i<=stockquantity;i++)
@@ -362,17 +369,18 @@ $("#txtstockreset").click(function(){
                     {
                        $('#cpu_serial_number_'+i).css("border","#333 solid 1px"); 
                     }
-                    
-                    if($('#m_serial_number_'+i).val().length ==0)
-                    {
-                    $('#m_serial_number_'+i).focus();
-                    $('#m_serial_number_'+i).css("border","red solid 1px");
-                    return false;
-                    }
-                    else
-                    {
-                       $('#m_serial_number_'+i).css("border","#333 solid 1px"); 
-                    }
+                    if (stockhardware == 1){
+	                    if($('#m_serial_number_'+i).val().length ==0)
+	                    {
+	                    $('#m_serial_number_'+i).focus();
+	                    $('#m_serial_number_'+i).css("border","red solid 1px");
+	                    return false;
+	                    }
+	                    else
+	                    {
+	                       $('#m_serial_number_'+i).css("border","#333 solid 1px"); 
+	                    }
+	                }
                      
                   }
                   
@@ -769,12 +777,22 @@ $("#txtstockreset").click(function(){
             success: function(result) {
 				if (result == 0) {
 					$("#loader").hide();
-					alert('New scrap has been added succesfully!');
+					alert('New scrap has been added succesfully!mail sent');
+					window.location.reload();
+				} else if (result == 1) {
+					$("#loader").hide();
+					alert('New scrap has been added succesfully!mail not sent');
 					window.location.reload();
 				} else if (result == 101){
 					$("#loader").hide();
 					alert('Session expired! Login again');
 					window.location = 'logout.php';
+				} else if (result == 112){
+					$("#loader").hide();
+					alert('Asset is already scrapped or in waitig to approve from GM');
+				} else if (result == 113){
+					$("#loader").hide();
+					alert('This asset is alloted to one of employee! You can\'t scrap it');
 				} else if (result == 102){
 					$("#loader").hide();
 					alert('Employee ID already exist! Try another');

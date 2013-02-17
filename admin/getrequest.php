@@ -165,7 +165,31 @@ function getserials() {
     {
        $db = new cDB();
 		$resultarr = array();
-		$getSql = $db->Query("SELECT * FROM hz_products WHERE stockID IN (SELECT id FROM `hz_stock` WHERE `hardware`=$hardware_id AND `make`=$make_id AND `model`=$model_id) AND configurationID <> 0");
+		$sql = "SELECT a . * 
+					FROM (
+					SELECT * 
+					FROM hz_products
+					WHERE stockID
+					IN (
+						SELECT id
+						FROM  `hz_stock` 
+						WHERE  `hardware` =".$hardware_id."
+						AND  `make` =".$make_id."
+						AND  `model` =".$model_id."
+					)
+					AND configurationID <>0 AND status !=3
+					)a
+					WHERE a.ProductID NOT 
+					IN (
+					SELECT cpuno
+						FROM hz_registration
+					WHERE  `hardware` =".$hardware_id."
+					AND  `make` =".$make_id."
+					AND  `model` =".$model_id."
+					AND activestatus =  'A'
+					);";
+		//$getSql = $db->Query("SELECT * FROM hz_products WHERE stockID IN (SELECT id FROM `hz_stock` WHERE `hardware`=$hardware_id AND `make`=$make_id AND `model`=$model_id) AND configurationID <> 0");
+		$getSql = $db->Query($sql);
 		if ($db->RowCount) {
 			while ($db->ReadRow()) {
 				$resultarr[$db->RowData['productID']] = strtoupper($db->RowData['serial']);
@@ -187,7 +211,101 @@ function get_m_serials() {
     {
        $db = new cDB();
 		$resultarr = array();
-		$getSql = $db->Query("SELECT * FROM hz_products WHERE stockID IN (SELECT id FROM `hz_stock` WHERE `hardware`=$hardware_id AND `make`=$make_id AND `model`=$model_id) AND configurationID = 0");
+		$sql = "SELECT a . * 
+					FROM (
+					SELECT * 
+					FROM hz_products
+					WHERE stockID
+					IN (
+						SELECT id
+						FROM  `hz_stock` 
+						WHERE  `hardware` =".$hardware_id."
+						AND  `make` =".$make_id."
+						AND  `model` =".$model_id."
+					)
+					AND configurationID =0 AND status !=3
+					)a
+					WHERE a.ProductID NOT 
+					IN (
+					SELECT monitorno
+						FROM hz_registration
+					WHERE  `hardware` =".$hardware_id."
+					AND  `make` =".$make_id."
+					AND  `model` =".$model_id."
+					AND activestatus =  'A'
+					);";
+		//$getSql = $db->Query("SELECT * FROM hz_products WHERE stockID IN (SELECT id FROM `hz_stock` WHERE `hardware`=$hardware_id AND `make`=$make_id AND `model`=$model_id) AND configurationID = 0");
+		$getSql = $db->Query($sql);
+		if ($db->RowCount) {
+			while ($db->ReadRow()) {
+				$resultarr[$db->RowData['productID']] = strtoupper($db->RowData['serial']);
+			}
+			echo json_encode($resultarr);
+		} else {
+			echo "102"; // id doesn't exist
+		}
+    }
+	
+}
+
+
+// Get cpu serials numbers
+function getSerialsToScrap() {
+    $hardware_id = $_REQUEST["hardware"];
+    $make_id = $_REQUEST["make"];
+    $model_id = $_REQUEST["model"];
+    if($hardware_id && $make_id && $model_id)
+    {
+       $db = new cDB();
+		$resultarr = array();
+		$sql = "SELECT * 
+					FROM hz_products
+					WHERE stockID
+					IN (
+						SELECT id
+						FROM  `hz_stock` 
+						WHERE  `hardware` =".$hardware_id."
+						AND  `make` =".$make_id."
+						AND  `model` =".$model_id."
+					)
+					AND configurationID <>0 AND status !=3
+					";
+		//$getSql = $db->Query("SELECT * FROM hz_products WHERE stockID IN (SELECT id FROM `hz_stock` WHERE `hardware`=$hardware_id AND `make`=$make_id AND `model`=$model_id) AND configurationID <> 0");
+		$getSql = $db->Query($sql);
+		if ($db->RowCount) {
+			while ($db->ReadRow()) {
+				$resultarr[$db->RowData['productID']] = strtoupper($db->RowData['serial']);
+			}
+			echo json_encode($resultarr);
+		} else {
+			echo "102"; // id doesn't exist
+		}
+    }
+	
+}
+
+// Get cpu serials numbers
+function getMSerialsToScrap() {
+    $hardware_id = $_REQUEST["hardware"];
+    $make_id = $_REQUEST["make"];
+    $model_id = $_REQUEST["model"];
+    if($hardware_id && $make_id && $model_id)
+    {
+       $db = new cDB();
+		$resultarr = array();
+		$sql = "SELECT * 
+					FROM hz_products
+					WHERE stockID
+					IN (
+						SELECT id
+						FROM  `hz_stock` 
+						WHERE  `hardware` =".$hardware_id."
+						AND  `make` =".$make_id."
+						AND  `model` =".$model_id."
+					)
+					AND configurationID =0 AND status !=3";
+		//$getSql = $db->Query("SELECT * FROM hz_products WHERE stockID IN (SELECT id FROM `hz_stock` WHERE `hardware`=$hardware_id AND `make`=$make_id AND `model`=$model_id) AND configurationID = 0");
+		$getSql = $db->Query($sql);
 		if ($db->RowCount) {
 			while ($db->ReadRow()) {
 				$resultarr[$db->RowData['productID']] = strtoupper($db->RowData['serial']);
@@ -317,7 +435,16 @@ if (isset($_REQUEST['functype'])) {
 		get_m_serials();
 		break;
         
-        
+		//cpu serials scrap
+        case 'getSerialsToScrap':
+		getSerialsToScrap();
+		break;
+		
+		//monitor serials scrap
+        case 'getMSerialsToScrap':
+		getMSerialsToScrap();
+		break;
+		
         case 'getcpuconfig':
 		getcpuconfig();
 		break;

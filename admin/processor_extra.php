@@ -119,23 +119,45 @@ function newscrap()
         {
     		if (($hardware != ''  && $serial != '' && $reason != '' && $approved != '' ) )
              {
+             	
     		  $sql = "INSERT INTO hz_scraps(HardwareID,ProductID,Reason,Apporved,LdapID) VALUES('".$hardware."','".$serial."','".$reason."','".$approved."','".$_SESSION["ldapid"]."') ";
-              $db1 = new cDB();
- 			    if($db1->Query($sql))
-                {
-                    sendMailToHOD("Admin@hz.com","New scrap added");
-                    echo "0";
-                    die();
-                }
-              
-             }
-             else {
-    		echo "105"; // form field hasn't received by post
-    		die();
-    		}
-          
-          
-        }
+              $db = new cDB();
+    		  $db1 = new cDB();
+    		  $db2 = new cDB();
+    		  $db2->Query('SELECT * FROM hz_scraps WHERE ProductID='.$serial.' AND status IN(0,1) ORDER BY ScrapID Desc LIMIT 0,1');
+    		  if ($db2->RowCount) {
+    		  		echo "112"; //Eiter already scraped or in waiting
+    		  } else {
+    		  	$db2->Query("SELECT * FROM hz_registration WHERE (monitorno=".$serial." OR cpuno=".$serial.") AND activestatus='A'");
+    		  	  if ($db2->RowCount) {
+    		  		echo "113"; //Eiter already scraped or in waiting
+	    		  } else {
+	    		  	if($db1->Query($sql))
+		                {
+		                    $db->Query('SELECT gmEmail FROM config_ldap WHERE id='.$_SESSION['ldapid']);
+		                	if ($db->RowCount) {
+		                		if ($db->ReadRow()) {
+				                    $sendmail = sendMailToHOD($db->RowData['gmEmail'],"New scrap added",$db1->LastInsertID);
+				                    if ($sendmail) {
+					                    echo "0"; //mail sent
+					                    die();
+				                    } else {
+					                    echo "1"; //Mail not sent
+					                    die();
+				                    }
+		                		} else {
+		                			echo "111";//Email not found or session variable missing
+		                		}
+		                	}
+		                }
+	    		  }
+    		  	
+    		  }
+	           } else {
+	    		echo "105"; // form field hasn't received by post
+	    		die();
+	    		}
+    		  }
         else
         {
 		echo "104"; //Internal update error
@@ -144,10 +166,13 @@ function newscrap()
 }
 
 
-function sendMailToHOD($from,$subject)
+function sendMailToHOD($from,$subject,$scrapID)
 {
 
+$url = explode("/",$_SERVER["SCRIPT_NAME"]);
 
+$approve_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/scrapResponse.php?gmScrapApproved=1&request_id=".$scrapID;
+$reject_url = "http://".$_SERVER["SERVER_NAME"].$url[0]."/".$url[1]."/scrapResponse.php?gmScrapApproved=0&request_id=".$scrapID;
 if($request_info["hardware"]==1){$harware_name="DESKTOP";}
 if($request_info["hardware"]==2){$harware_name="LAPTOP";}
 if($request_info["hardware"]==3){$harware_name="PRINTER";}
@@ -176,6 +201,7 @@ $body ='<!DOCTYPE HTML>
 <td>Apporved By:</td>
 <td>'.$_REQUEST["approved"].'</td>
 </tr>
+<tr><td></td><td><a href="'.$approve_url.'">Approve</a>&nbsp;&nbsp;<a href="'.$reject_url.'">Reject</a></td></tr>
 <tr><td></td></tr>
 
 </table>

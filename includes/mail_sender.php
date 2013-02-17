@@ -127,12 +127,17 @@ $body             = eregi_replace("[\]",'',$body);
 $mail->Subject    = $subject;
 
 $db = new cDB();
+if (isset($_SESSION["ldapid"])) {
 $getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]);
         //echo $getSql;
        if ($db->RowCount) {
 			while ($db->ReadRow()) {
 				$code = strtoupper($db->RowData['gmEmail']);
 			}
+} else {
+	$code = 'avanik35@gmail.com';
+}
+
 $hod_mail = $code;
 $headers  = 'MIME-Version: 1.0' . "\r\n";
 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -148,6 +153,7 @@ if(!$mail) {
   return 1;
 }
 
+}
 }
 
 
@@ -428,12 +434,16 @@ $body ='<!DOCTYPE HTML>
 </html>';
 $body             = eregi_replace("[\]",'',$body);
 $db = new cDB();
+if (isset($_SESSION["ldapid"])) {
 $getSql = $db->Query("SELECT * FROM `config_ldap` WHERE id=".$_SESSION["ldapid"]);
         //echo $getSql;
        if ($db->RowCount) {
 			while ($db->ReadRow()) {
 				$code = strtoupper($db->RowData['gmEmail']);
 			}
+} else {
+	$code = 'avanik35@gmail.com';
+}
 $hod_mail = $code;
 $headers  = 'MIME-Version: 1.0' . "\r\n";
 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -449,5 +459,6 @@ if(!$mail) {
   return 1;
 }
 
+}
 }
 ?>

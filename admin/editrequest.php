@@ -1226,6 +1226,49 @@ function editotherregistration() {
 	}
 }
 
+//Store Asset funtion definition
+function storeAsset() {
+	$assetID = (int)$_REQUEST['assetID'];
+	if (!isset($_SESSION['username'])) {
+		echo "101"; // Session expires! Login again
+		die();
+	} else if (isset($assetID)) {
+		if (($assetID != '') && (is_numeric($assetID))) {
+			$db  = new cDB();
+			$db1 = new cDB();
+			$db2 = new cDB();
+			$db3 = new cDB();
+			$validateid  = "SELECT * FROM hz_registration WHERE id=".$assetID." AND activestatus='A'";
+			$db->Query($validateid);
+			if ($db->RowCount) {
+				if ($db->ReadRow()){
+					$updateStock = $db1->Query('UPDATE hz_products SET status=2 WHERE ProductID IN('.$db->RowData['cpuno'].','.$db->RowData['monitorno'].') AND status=1');
+					if ($updateStock) {
+						$updateAsset = $db1->Query("UPDATE hz_registration SET activestatus='D' WHERE id=".$assetID." AND activestatus='A'");
+						if ($updateAsset) {
+							echo "0"; //update success.
+							die();
+						} else {
+							$updateStock = $db1->Query('UPDATE hz_products SET status=1 WHERE ProductID IN('.$db->RowData['cpuno'].','.$db->RowData['monitorno'].')');
+							echo "103"; //status false. Error updating record(s).
+							die();
+						}
+					} else {
+						echo "103"; //status false. Error updating record(s).
+						die();
+					}
+				}
+			} else {
+				echo "107"; //No entry in registration
+				die();
+			}
+		}
+			
+	} else {
+		echo "105"; // form field hasn't received by post
+		die();
+	}
+}
 
 if (isset($_POST['functype'])) {
 	switch ($_POST['functype']) {
@@ -1289,7 +1332,11 @@ if (isset($_POST['functype'])) {
 		case 'transferregistration':
 		transferregistration();
 		break;
-
+		
+		case 'storeAsset':
+		storeAsset();
+		break;
+		
 		default:
 		echo "404";
 	}

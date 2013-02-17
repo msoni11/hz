@@ -57,6 +57,7 @@ include '../../includes/Application.php';
 							<li><a href="listTransferRequests.php">Transfer Approval</a></li>
 							<li><a href="listAuditor.php">Auditor List</a></li>
 							<li><a href="listAsset.php">IT Asset</a></li>
+							<li><a href="listScrap.php">Scrap List</a></li>
 							<li><a href="listCriticalAsset.php">Critical Asset</a></li>
 							<li><a href="listConsumable.php">Consumable Items</a></li>
 							<li><a href="listNetwork.php">Network</a></li>
@@ -88,7 +89,7 @@ include '../../includes/Application.php';
 					<li><a href="../criticalasset.php">CRITICAL ASSET</a></li>
 					<li><a href="../importcsv.php">IMPORT</a></li>
 					<li><a href="../addScrap.php">SCRAP</a></li>
-					<li><a href="../ip.php">IP</a></li>
+					<li><a href="../ip.php">Auditor IP</a></li>
 					<li><a href="../addIPAddress.php">Add IP</a></li>
 					<li><a href="../addLocation.php">Add Location</a></li>
 					<!--<li><a href="logout.php">LOGOUT</a></li>-->

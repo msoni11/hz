@@ -2190,5 +2190,36 @@ $("#editotherstockhardware").change(function(){
 
 // js for edit other itasset form |end|
 
+//js to move asset to store |start|
+$('a #moveToS').live('click', function(){
+	$this = $(this);
+	var assetID = $('#assetID').val();
+	conf = confirm("Are you sure you want to move this asset to store");
+	if (conf) {
+		$.ajax({
+			url:'../editrequest.php',
+			type:'POST',
+			data:'functype=storeAsset&assetID='+assetID,
+			success : function(val){
+				if (val == 0) {
+					//show success message
+					alert('Asset has been moved to store successfully!');
+					window.location.reload();
+				} else if (val==101) {
+					alert('Session expired! Login again!');					
+				} else if (val==103) {
+					alert('Error updating values! Try again later!');					
+				} else if (val==107){
+					alert('You have already moved it to store');
+				} else if (val==105) {
+					alert('Form field not received! try again later');
+				}
+			}
+		});
+	} else {
+		return false;
+	}
 	
+});
+//js to move asset to store |end|
 });

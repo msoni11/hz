@@ -14,18 +14,37 @@ $amcwar_array = explode(',', $amcwar);
 <!-- Navbar end   -->
 <script>
 $("document").ready(function(){
-    
+    $("#txthardware").change(function(){
+		$this = $(this).val();
+		if ($this == 1) {
+			$('#desktoptype').show();
+		} else {
+			$('#desktoptype').hide();
+		}
+    });
+        
     
 	
 	$("#txtmodel").change(function(){
         var hardware= $("#txthardware").val();
         var make = $("#txtmake").val();
         var model = $("#txtmodel").val();
-        
+        var dtpType = $("#txtdesktoptype").val();
+		var vardata = '';
+        if (hardware == 1) {
+ 			if (dtpType == 'tft') {
+				vardata = "functype=getMSerialsToScrap&hardware="+hardware+"&make="+make+"&model="+model;
+ 	 		} else {
+				vardata = "functype=getSerialsToScrap&hardware="+hardware+"&make="+make+"&model="+model;
+ 	 		} 
+        } else {
+			vardata = "functype=getserials&hardware="+hardware+"&make="+make+"&model="+model;
+        }
+        console.log(vardata);
         $.ajax({
             url:"getrequest.php",
             type:"post",
-           data:"functype=getserials&hardware="+hardware+"&make="+make+"&model="+model,
+           data: vardata,
            success: function(result)
            {
             	var arr = $.parseJSON(result);
@@ -37,7 +56,7 @@ $("document").ready(function(){
            
         });
         
-         $.ajax({
+         /*$.ajax({
             url:"getrequest.php",
             type:"post",
            data:"functype=getmserials&hardware="+hardware+"&make="+make+"&model="+model,
@@ -51,7 +70,12 @@ $("document").ready(function(){
                 });
            }
            
-        });
+        });*/
+    });
+
+    $("#txtdesktoptype").change(function(){
+		$("#txtmake").val(-1);
+		$("#txtmodel").val(-1);
     });
     
     $("#txtcpuno").change(function(){
@@ -122,10 +146,12 @@ $("document").ready(function(){
 				</div>
 				<div class="text-box-field"><div id="hardwaretext"></div></div>
 				
-				<div id="printertype" style="display:none;">
+				<div id="desktoptype" style="display:none;">
 					<div class="text-box-name">Type:</div>
 					<div class="text-box-field">
-						<select name="txtprintertype" id = "txtprintertype"  class="form-text" style="width:91%" >
+						<select name="txtdesktoptype" id = "txtdesktoptype"  class="form-text" style="width:91%" >
+							<option value='cpu'>CPU</option>
+							<option value='tft'>TFT</option>
 						</select>
 					</div>
 					<div class="text-box-field"><div id="printertypetext"></div></div>
@@ -152,7 +178,7 @@ $("document").ready(function(){
 				</div>
 				<div class="text-box-field"><div id="modeltext"></div></div>
 				
-				<div class="text-box-name">CPU/P/S Sr. No.:</div>
+				<div class="text-box-name">Sr. No.:</div>
 				<div class="text-box-field">
                     <select name="txtcpuno" id="txtcpuno"  class="form-text" style="width:91%" >
 						<option value='-1'>----Select Serial Number----</option>
