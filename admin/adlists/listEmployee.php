@@ -89,7 +89,6 @@ $(document).ready( function () {
 						<th >Department</th>
 						<th >Designation</th>
 						<th >Email</th>
-						<th >Manager OU</th>
 						<th >Manager</th>
 						<th >Manager email</th>
 					</tr>
@@ -105,7 +104,6 @@ $(document).ready( function () {
 						echo "<td >".$empinf[0][0]['department'][0]."</td>";
 						echo "<td >".$empinf[0][0]['title'][0]."</td>";
 						echo "<td >".$empinf[0][0]['mail'][0]."</td>";
-						echo "<td >".$empinf[0][0]['manager'][0]."</td>";
 						echo "<td >".$empinf[1][0]['name'][0]."</td>";
 						echo "<td >".$empinf[1][0]['mail'][0]."</td>";
 					echo "</tr>";
