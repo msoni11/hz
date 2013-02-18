@@ -59,6 +59,7 @@ include '../../includes/Application.php';
 							<li><a href="listAsset.php">IT Asset</a></li>
 							<li><a href="listScrap.php">Scrap List</a></li>
 							<li><a href="listIp.php">IP List</a></li>
+							<li><a href="listStore.php">Store</a></li>
 							<li><a href="../assetVerification.php">Asset Verification</a></li>
 							<li><a href="listCriticalAsset.php">Critical Asset</a></li>
 							<li><a href="listConsumable.php">Consumable Items</a></li>

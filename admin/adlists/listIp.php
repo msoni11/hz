@@ -14,23 +14,23 @@ $(document).ready( function () {
 			"aButtons": [
 				{
 					"sExtends": "copy",
-					"mColumns": [0,1]
+					"mColumns": [0,1,2,3]
 				},
 				{
 					"sExtends": "csv",
-					"mColumns": [0,1]
+					"mColumns": [0,1,2,3]
 				},
 				{
 					"sExtends": "xls",
-					"mColumns": [0,1]
+					"mColumns": [0,1,2,3]
 				},
 				{
 					"sExtends": "pdf",
-					"mColumns": [0,1]
+					"mColumns": [0,1,2,3]
 				},
 				{
 					"sExtends": "print",
-					"mColumns": [0,1]
+					"mColumns": [0,1,2,3]
 				}
 			]
 		},									
@@ -60,6 +60,8 @@ $(document).ready( function () {
 					<tr>
 						<th style="display:none">ID</th>
 						<th >IP</th>
+						<th >Emp Username</th>
+						<th >Employeed ID</th>
 						<th >Status</th>
 					</tr>
 				</thead>
@@ -74,10 +76,16 @@ $(document).ready( function () {
 						echo "<tr>";
 						echo "<td style='display:none' >".$db->RowData['IpAddressID']."</td>";
 						echo "<td>".$db->RowData['Address']."</td>";
-						$db1->Query('SELECT ipaddr FROM hz_registration WHERE ipaddr='.$db->RowData['IpAddressID']);
+						$db1->Query("SELECT hr.empid, hr.ipaddr,he.empiddescr FROM hz_registration hr, hz_employees he WHERE ipaddr=".$db->RowData['IpAddressID']." AND activestatus='A'");
 						if($db1->RowCount) {
-							echo "<td>Reserved</td>";
+							if($db1->ReadRow()) {
+								echo "<td>".$db1->RowData['empid']."</td>";
+								echo "<td>".$db1->RowData['empiddescr']."</td>";
+								echo "<td>Reserved</td>";
+							}
 						} else {
+							echo "<td>NONE</td>";
+							echo "<td>NONE</td>";
 							echo "<td>Free</td>";
 						}
 						echo "</tr>";

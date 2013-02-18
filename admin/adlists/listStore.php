@@ -96,6 +96,8 @@ $(document).ready( function () {
 							if ($db1->ReadRow()) {
 								$sysconfig = $db1->RowData['config'];
 							}
+						} else {
+							$sysconfig = 'NONE';
 						}
 						
 					echo "<tr>";
@@ -103,7 +105,7 @@ $(document).ready( function () {
 						echo "<td >".$make."</th>";
 						echo "<td >".$model."</th>";
 						echo "<td >".$db->RowData['serial']."</th>";
-						echo "<td >".$sysconfig = $sysconfig == '' ? 'NONE' : $sysconfig."</th>";
+						echo "<td >".$sysconfig ."</th>";
 					echo "</tr>";
 					}
 				}
