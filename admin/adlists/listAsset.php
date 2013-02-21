@@ -84,7 +84,7 @@ $(document).ready( function () {
 				$db = new cDB();
 				$db1 = new cDB();
 				$sql = "SELECT hr.* FROM 
-						hz_registration hr LEFT OUTER JOIN hz_employees he ON (hr.empid = he.empid) WHERE hr.activestatus='A'";
+						hz_registration hr LEFT OUTER JOIN hz_employees he ON (hr.empid = he.empid) WHERE hr.activestatus='A' and hr.ldapID=".$_SESSION['ldapid'];
 				$db1->Query($sql);
 				if ($db1->RowCount) {
 					while ($db1->ReadRow()) {

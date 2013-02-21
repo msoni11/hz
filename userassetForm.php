@@ -26,15 +26,19 @@ $("document").ready(function(){
 				data:'functype=getassetdetails&reggetempid='+empid,
 				success: function(result) {
 					try {
-						obj = $.parseJSON(result);
-						var table = '';
-						table += '<table cellspacing="10" cellpadding="10">';
-						table += '<tr><th>Hardware</th><th>CPU/P/S Serial</th></tr>';
-						$.each(obj, function(key,val){
-							table += '<tr><td>'+val['name']+'</td><td>'+val['serial']+'</td></tr>';
-						});
-						table += '</table>';
-						$("#space_for_table").empty().append(table);
+						if (result == 102) {
+							$("#space_for_table").empty().append('No Asset Issued!!');
+						} else {
+							obj = $.parseJSON(result);
+							var table = '';
+							table += '<table cellspacing="10" cellpadding="10">';
+							table += '<tr><th>Hardware</th><th>CPU/P/S Serial</th><th>Configuration</th></tr>';
+							$.each(obj, function(key,val){
+								table += '<tr><td>'+val['name']+'</td><td>'+val['serial']+'</td><td>'+val['config']+'</td></tr>';
+							});
+							table += '</table>';
+							$("#space_for_table").empty().append(table);
+						}
 					} catch(e) {
 						$("#space_for_table").empty().append('No Asset Issued!!');
 					}

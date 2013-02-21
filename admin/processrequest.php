@@ -124,7 +124,8 @@ function newregistration() {
 	$regcurrlocation = $_REQUEST['currlocation'];
 	$regotherasset = strtoupper($_REQUEST['regotherasset']);
 	$regstatus = strtoupper($_REQUEST['regstatus']);
-
+	$ldapid = $_SESSION['ldapid'];
+	
 	if (!isset($_SESSION['username'])) {
 		echo "101"; // Session expires! Login again
 		die;
@@ -283,10 +284,10 @@ function newregistration() {
 								}
 								$sql = "INSERT INTO hz_registration(empid, hardware, cartage, printertype, make, model, cpuno,
 																	monitortype, monitorno, sysconfig, assetcode, ipaddr, 
-																	internet, internettype, warnorvendor, date,location, status
+																	internet, internettype, warnorvendor, date,location, status, ldapID
 																	) 
 										VALUES('".$regempid."','".$reghardware."','".$regcartage."','".$regprintertype."','".$regmake."','".$regmodel."','".$regcpuno."','".$regmonitor."','".$regcrtno."','".$regconfig."',
-												'".$regasset."','".$regip."','".$reginternet."','".$regamc."','".$warnvendor."','".$date."','".$regcurrlocation."','".$regstatus."')";
+												'".$regasset."','".$regip."','".$reginternet."','".$regamc."','".$warnvendor."','".$date."','".$regcurrlocation."','".$regstatus."','".$ldapid."')";
 							
 								$db1->Query($sql);
 								if ($db1->LastInsertID) {

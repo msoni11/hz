@@ -349,20 +349,20 @@ function getassetdetails() {
 		$db  = new cDB();
 		$db1 = new cDB();
 		$resultarr = array();
-		$getSql = $db->Query("SELECT hr.*,hz.name FROM hz_registration hr LEFT OUTER JOIN hz_hardware hz ON hr.hardware = hz.id WHERE hr.empid='".$id."'");
+		$getSql = $db->Query("SELECT hr.*,hz.name FROM hz_registration hr LEFT OUTER JOIN hz_hardware hz ON hr.hardware = hz.id WHERE hr.empid='".$id."' AND hr.activestatus='A'");
 		if ($db->RowCount) {
 			while ($db->ReadRow()) {
-				$cpuno = $db1->Query('SELECT serial FROM hz_products WHERE productID='.$db->RowData['cpuno']);
+				$cpuno = $db1->Query('SELECT hp.serial,hc.config FROM hz_products hp, hz_configuration hc WHERE hp.configurationID=hc.id AND hp.productID='.$db->RowData['cpuno']);
 				if ($db1->RowCount) {
 				    if ($db1->ReadRow()) {
-				$arrdata[] = array_merge($db->RowData,$db1->RowData);;
+						$arrdata[] = array_merge($db->RowData,$db1->RowData);;
 						//$arrdata[] = $db1->RowData;
 					}
 				}
 			}
 			echo json_encode($arrdata);
 		} else {
-		echo "102"; // id doesn't exist
+			echo "102"; // id doesn't exist
 		}
 	}
 }
