@@ -25,7 +25,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 1) {
 				LEFT OUTER JOIN hz_departments hd ON ( hs.department = hd.id )
 				LEFT OUTER JOIN hz_hardware hh ON ( hs.hardware = hh.id )
 				LEFT OUTER JOIN hz_make hm ON ( hs.make = hm.id )
-				LEFT OUTER JOIN hz_model hmo ON ( hs.model = hmo.id ) where hardware != 3)
+				LEFT OUTER JOIN hz_model hmo ON ( hs.model = hmo.id ) where hardware != 3 AND hs.adminID=".$_SESSION['ldapid'].")
 			UNION
 			(SELECT hd.name department, hh.name hardware, hpt.printertype type , hm.name make, hpmo.printermodel model, hs.invoiceno invoiceno, hs.orderdate orderdate, hs.partyname partyname, hs.receivername receivername, hs.quantity quantity, hs.rate rate, hs.otherstatus otherstatus, hs.entrytype entrytype, hs.id id
 				FROM `hz_stock` hs
@@ -33,7 +33,7 @@ if (!isset($_SESSION['username']) || $_SESSION['isadmin'] != 1) {
 				LEFT OUTER JOIN hz_hardware hh ON ( hs.hardware = hh.id )
 				LEFT OUTER JOIN hz_printertype hpt ON ( hs.type = hpt.id )
 				LEFT OUTER JOIN hz_make hm ON ( hs.make = hm.id )
-				LEFT OUTER JOIN hz_printermodel hpmo ON ( hs.model = hpmo.id ) where hardware = 3))c
+				LEFT OUTER JOIN hz_printermodel hpmo ON ( hs.model = hpmo.id ) where hardware = 3 AND hs.adminID=".$_SESSION['ldapid']."))c
 	");
 
 ?>
